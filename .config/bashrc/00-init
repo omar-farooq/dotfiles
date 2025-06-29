@@ -1,0 +1,11 @@
+# -----------------------------------------------------
+# INIT
+# -----------------------------------------------------
+
+# -----------------------------------------------------
+# Exports
+# -----------------------------------------------------
+export EDITOR=nvim
+export GOBIN=/home/omar/go/bin
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH="/usr/lib/ccache/bin/:$GOBIN:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"

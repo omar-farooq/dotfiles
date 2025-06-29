@@ -1,0 +1,71 @@
+function hp() {
+    if [ "$1" = "on" ] ; then
+        hyprctl dispatch dpms on DP-1
+    elif [ "$1" = "off" ] ; then
+        hyprctl dispatch dpms off DP-1
+    else
+        echo "on or off"
+    fi
+}
+
+function inn() {
+    if [ "$1" = "on" ] ; then
+        hyprctl dispatch dpms on DP-3
+    elif [ "$1" = "off" ] ; then
+        hyprctl dispatch dpms off DP-3
+    else
+        echo "on or off"
+    fi
+}
+alias innocn="inn"
+
+#!/bin/bash
+# Using a shebang is good practice if you save this to a file
+
+function tv() {
+    # Define monitor names in variables for easy changes
+    local TV_MONITOR="HDMI-A-1"
+    local PRIMARY_DESK_MONITOR="DP-3"
+    local SECONDARY_DESK_MONITOR="DP-1"
+
+    if [ "$1" = "on" ]; then
+        # Check if TV is connected
+        if ! hyprctl monitors | grep -q "$TV_MONITOR"; then
+            echo "Error: TV ($TV_MONITOR) not detected."
+            return 1
+        fi
+        
+        echo "Activating TV mode..."
+        hyprctl dispatch dpms on "$TV_MONITOR"
+        hyprctl dispatch movecurrentworkspacetomonitor "$TV_MONITOR"
+        hyprctl dispatch dpms off "$PRIMARY_DESK_MONITOR"
+        hyprctl dispatch dpms off "$SECONDARY_DESK_MONITOR"
+        echo "Workspace moved to $TV_MONITOR. Desktop monitors disabled."
+
+    elif [ "$1" = "off" ]; then
+        echo "Activating Desktop mode..."
+        # Prioritize DP-3, but fall back to DP-1
+        if hyprctl monitors | grep -q "$PRIMARY_DESK_MONITOR"; then
+            echo "Primary monitor $PRIMARY_DESK_MONITOR found. Activating."
+            hyprctl dispatch dpms on "$PRIMARY_DESK_MONITOR"
+            hyprctl dispatch movecurrentworkspacetomonitor "$PRIMARY_DESK_MONITOR"
+            # Also turn on the other desk monitor if it exists
+            hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
+        elif hyprctl monitors | grep -q "$SECONDARY_DESK_MONITOR"; then
+            echo "Primary monitor not found. Falling back to $SECONDARY_DESK_MONITOR."
+            hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
+            hyprctl dispatch movecurrentworkspacetomonitor "$SECONDARY_DESK_MONITOR"
+        else
+            echo "Error: No desktop monitors found. Cannot switch off TV."
+            return 1
+        fi
+        
+        echo "Desktop mode activated. Disabling TV."
+#        hyprctl dispatch dpms off "$TV_MONITOR"
+
+    else
+        echo "Usage: tv [on|off]"
+        return 1
+    fi
+}
+
