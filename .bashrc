@@ -21,3 +21,5 @@ if [ -d ~/.config/bashrc/custom ] ;then
 else
     for f in ~/.config/bashrc/*; do source $f; done
 fi
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:$HOME/.maestro/bin

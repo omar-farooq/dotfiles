@@ -45,7 +45,7 @@ if hyprctl monitors | grep -q "Monitor $TARGET_MONITOR"; then
 fi
 
 # Listen for events using socat. The while loop will run forever.
-socat - "UNIX-CONNECT:/tmp/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r event; do
+socat - "UNIX-CONNECT:${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" | while read -r event; do
     # Event for monitor being connected or turned on
     if [[ $event == "monitoradded>>$TARGET_MONITOR" ]]; then
         launch_cava
