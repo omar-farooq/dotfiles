@@ -1,8 +1,20 @@
+# Since Hyprland 0.56 the config is Lua and `hyprctl dispatch` parses its
+# argument as Lua rather than the old `dispatch <name> <args>` syntax. Watch
+# out for dpms in particular: it accepts unrecognised arguments without
+# complaint and then falls back to toggling *every* monitor.
+_hypr_dpms() { # $1 = on|off, $2 = monitor name
+    hyprctl dispatch "hl.dsp.dpms({ action = \"$1\", monitor = \"$2\" })"
+}
+
+_hypr_move_workspace_to() { # $1 = monitor name
+    hyprctl dispatch "hl.dsp.workspace.move({ monitor = \"$1\" })"
+}
+
 function hp() {
     if [ "$1" = "on" ] ; then
-        hyprctl dispatch dpms on DP-1
+        _hypr_dpms on DP-1
     elif [ "$1" = "off" ] ; then
-        hyprctl dispatch dpms off DP-1
+        _hypr_dpms off DP-1
     else
         echo "on or off"
     fi
@@ -10,9 +22,9 @@ function hp() {
 
 function inn() {
     if [ "$1" = "on" ] ; then
-        hyprctl dispatch dpms on DP-3
+        _hypr_dpms on DP-3
     elif [ "$1" = "off" ] ; then
-        hyprctl dispatch dpms off DP-3
+        _hypr_dpms off DP-3
     else
         echo "on or off"
     fi
@@ -36,10 +48,10 @@ function tv() {
         fi
         
         echo "Activating TV mode..."
-        hyprctl dispatch dpms on "$TV_MONITOR"
-        hyprctl dispatch movecurrentworkspacetomonitor "$TV_MONITOR"
-        hyprctl dispatch dpms off "$PRIMARY_DESK_MONITOR"
-        hyprctl dispatch dpms off "$SECONDARY_DESK_MONITOR"
+        _hypr_dpms on "$TV_MONITOR"
+        _hypr_move_workspace_to "$TV_MONITOR"
+        _hypr_dpms off "$PRIMARY_DESK_MONITOR"
+        _hypr_dpms off "$SECONDARY_DESK_MONITOR"
         echo "Workspace moved to $TV_MONITOR. Desktop monitors disabled."
 
     elif [ "$1" = "off" ]; then
@@ -47,21 +59,21 @@ function tv() {
         # Prioritize DP-3, but fall back to DP-1
         if hyprctl monitors | grep -q "$PRIMARY_DESK_MONITOR"; then
             echo "Primary monitor $PRIMARY_DESK_MONITOR found. Activating."
-            hyprctl dispatch dpms on "$PRIMARY_DESK_MONITOR"
-            hyprctl dispatch movecurrentworkspacetomonitor "$PRIMARY_DESK_MONITOR"
+            _hypr_dpms on "$PRIMARY_DESK_MONITOR"
+            _hypr_move_workspace_to "$PRIMARY_DESK_MONITOR"
             # Also turn on the other desk monitor if it exists
-            hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
+            _hypr_dpms on "$SECONDARY_DESK_MONITOR"
         elif hyprctl monitors | grep -q "$SECONDARY_DESK_MONITOR"; then
             echo "Primary monitor not found. Falling back to $SECONDARY_DESK_MONITOR."
-            hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
-            hyprctl dispatch movecurrentworkspacetomonitor "$SECONDARY_DESK_MONITOR"
+            _hypr_dpms on "$SECONDARY_DESK_MONITOR"
+            _hypr_move_workspace_to "$SECONDARY_DESK_MONITOR"
         else
             echo "Error: No desktop monitors found. Cannot switch off TV."
             return 1
         fi
         
         echo "Desktop mode activated. Disabling TV."
-#        hyprctl dispatch dpms off "$TV_MONITOR"
+#        _hypr_dpms off "$TV_MONITOR"
 
     else
         echo "Usage: tv [on|off]"

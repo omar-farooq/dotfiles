@@ -16,6 +16,18 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# Since Hyprland 0.56 the config is Lua, and `hyprctl dispatch` parses its
+# argument as Lua rather than the old `dispatch <name> <args>` syntax. Note that
+# a dpms dispatch with unrecognised args silently degrades to "toggle every
+# monitor", so these wrappers must build the table exactly.
+dpms() { # $1 = on|off, $2 = monitor name
+    hyprctl dispatch "hl.dsp.dpms({ action = \"$1\", monitor = \"$2\" })" > /dev/null
+}
+
+move_workspace_to() { # $1 = monitor name
+    hyprctl dispatch "hl.dsp.workspace.move({ monitor = \"$1\" })" > /dev/null
+}
+
 # Get the name of the currently focused monitor
 FOCUSED_MONITOR=$(hyprctl -j monitors | jq -r '.[] | select(.focused==true).name')
 
@@ -26,16 +38,16 @@ if [ "$FOCUSED_MONITOR" = "$TV_MONITOR" ]; then
     # Find which desktop monitor to switch to, prioritizing the primary one.
     # `hyprctl monitors all` detects monitors that might be off (DPMS).
     if hyprctl monitors all | grep -q "$PRIMARY_DESK_MONITOR"; then
-        hyprctl dispatch dpms on "$PRIMARY_DESK_MONITOR"
-        hyprctl dispatch movecurrentworkspacetomonitor "$PRIMARY_DESK_MONITOR"
+        dpms on "$PRIMARY_DESK_MONITOR"
+        move_workspace_to "$PRIMARY_DESK_MONITOR"
         # Also turn on the secondary monitor if it exists
         if hyprctl monitors all | grep -q "$SECONDARY_DESK_MONITOR"; then
-            hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
+            dpms on "$SECONDARY_DESK_MONITOR"
         fi
     elif hyprctl monitors all | grep -q "$SECONDARY_DESK_MONITOR"; then
         # Fallback to the secondary monitor
-        hyprctl dispatch dpms on "$SECONDARY_DESK_MONITOR"
-        hyprctl dispatch movecurrentworkspacetomonitor "$SECONDARY_DESK_MONITOR"
+        dpms on "$SECONDARY_DESK_MONITOR"
+        move_workspace_to "$SECONDARY_DESK_MONITOR"
     else
         hyprctl notify -1 5000 "rgb(ff1111)" "Error: No desktop monitors detected."
         exit 1
@@ -43,7 +55,7 @@ if [ "$FOCUSED_MONITOR" = "$TV_MONITOR" ]; then
     
     notify-send "TV off" "Moving back to desktop mode"
     # Finally, turn the TV off
-    #hyprctl dispatch dpms off "$TV_MONITOR"
+    #dpms off "$TV_MONITOR"
 
 else
     # STATE: A Desktop monitor is focused. ACTION: Switch to TV.
@@ -55,12 +67,12 @@ else
         exit 1
     fi
 
-    hyprctl dispatch dpms on "$TV_MONITOR"
-    hyprctl dispatch movecurrentworkspacetomonitor "$TV_MONITOR"
-    
+    dpms on "$TV_MONITOR"
+    move_workspace_to "$TV_MONITOR"
+
     # Turn off both desktop monitors
-    hyprctl dispatch dpms off "$PRIMARY_DESK_MONITOR"
-    hyprctl dispatch dpms off "$SECONDARY_DESK_MONITOR"
+    dpms off "$PRIMARY_DESK_MONITOR"
+    dpms off "$SECONDARY_DESK_MONITOR"
     notify-send "TV on" "Turned off other monitors"
 fi
 

@@ -179,6 +179,12 @@ hl.bind(mainMod .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-
 
 -- Toggle moving workspace to tv
 
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "L", hl.dsp.exec_cmd(
+    "alacritty --class dotfiles-floating -e bash -c " ..
+    "'~/.config/hypr/scripts/list-windows.sh; echo; read -n1 -s -r -p \"Press any key to close...\"'"))
+
+-- List all windows grouped by workspace
+
 -- Workspaces
 
 hl.bind(mainMod .. " + " .. 1, hl.dsp.focus({ workspace = 1 }))
@@ -371,7 +377,7 @@ hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh
 
 -- Open calculator
 
-hl.bind("XF86Lock", hl.dsp.exec_cmd("hyprlock"))
+hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("hyprlock"))
 
 -- Open screenlock
 
