@@ -4,9 +4,13 @@
 
 ---@module 'hl'
 
+-- The refresh rate belongs after an "@": "3440x1440 highrr" (with a space) is
+-- not a parseable mode, so this panel silently ran at 60Hz instead of its 165.
+-- Note that a bare "highrr" means "highest refresh at ANY resolution", which on
+-- this hardware picks 1024x768@75 -- so pin the rate explicitly.
 hl.monitor({
     output   = "DP-1",
-    mode     = "3440x1440 highrr",
+    mode     = "3440x1440@165",
     position = "0x0",
     scale    = 1,
 })

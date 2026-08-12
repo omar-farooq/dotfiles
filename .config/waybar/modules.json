@@ -13,7 +13,23 @@
     "on-click": "activate",
     "active-only": false,
     "all-outputs": true,
-    "format": "{}",
+    // Show an icon per window inside each workspace pill, so the bar says what
+    // is running where without having to go and look.
+    "format": "{icon} {windows}",
+    "format-window-separator": " ",
+    // U+F2D0 window-maximize, for anything not matched below.
+    "window-rewrite-default": "\uf2d0",
+    "window-rewrite": {
+      // The cava wallpaper is a background window on DP-1; without this every
+      // workspace there would show a phantom icon.
+      "class<alacritty-cava-bg>": "",
+      "class<firefox>": "\uf269",
+      "class<Alacritty>": "\uf120",
+      "class<Spotify>": "\uf1bc",
+      "class<Brave-browser>": "\uf0ac",
+      "class<Chromium>": "\uf0ac",
+      "class<Microsoft-edge>": "\uf0ac"
+    },
     "format-icons": {
       "urgent": "",
       "active": "",

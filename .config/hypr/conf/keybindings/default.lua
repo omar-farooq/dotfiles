@@ -198,13 +198,18 @@ hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_
 
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { description = "Toggle mute" })
 
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { description = "Audio play pause" })
+-- Bare `playerctl` acts on whichever player it happens to pick first, so with a
+-- YouTube tab open the media keys would control the browser instead of Spotify.
+-- "spotify,%any" makes Spotify the preferred target and falls back to any other
+-- player when Spotify is not running, so the keys never become dead.
 
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl pause"), { description = "Audio pause" })
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl --player=spotify,%any play-pause"), { description = "Audio play pause (prefers Spotify)" })
 
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { description = "Audio next" })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl --player=spotify,%any pause"), { description = "Audio pause (prefers Spotify)" })
 
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { description = "Audio previous" })
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl --player=spotify,%any next"), { description = "Audio next (prefers Spotify)" })
+
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl --player=spotify,%any previous"), { description = "Audio previous (prefers Spotify)" })
 
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { description = "Toggle microphone" })
 
