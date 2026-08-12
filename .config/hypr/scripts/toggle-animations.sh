@@ -7,10 +7,7 @@ set_animations() { # $1 = true|false
     hyprctl eval "hl.config({ animations = { enabled = $1 } })" > /dev/null
 }
 
-# The active config is animation.lua now; animation.conf is only still around
-# for the legacy variation switcher, so check whichever one is present.
 animation_config="$HOME/.config/hypr/conf/animation.lua"
-[ -f "$animation_config" ] || animation_config="$HOME/.config/hypr/conf/animation.conf"
 
 if [[ $(cat "$animation_config") == *"disabled"* ]]; then
     echo ":: Toggle blocked by disabled variation."

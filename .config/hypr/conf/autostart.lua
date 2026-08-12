@@ -64,8 +64,10 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("~/.config/hypr/scripts/gtk.sh")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("wl-paste --watch cliphist store")
-    hl.exec_cmd("~/.config/hypr/scripts/ml4w-welcome-autostart.sh")
-    hl.exec_cmd("ags &")
+    -- Dropped: the ML4W welcome autostart (disabled by a cache marker for years,
+    -- and it referenced the postinstall script we removed), and `ags &` -- the
+    -- installed ags is v3 (Astal) while ~/.config/ags was a v1 config, so bare
+    -- `ags` just printed its help and exited. Waybar is the bar in use.
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("~/.config/waybar/launch.sh")
     hl.exec_cmd("~/.config/hypr/scripts/cleanup.sh")

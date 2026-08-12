@@ -22,365 +22,194 @@ local SCRIPTS = "~/.config/ml4w/scripts"
 
 -- Applications
 
-hl.bind(mainMod .. " + " .. "RETURN", hl.dsp.exec_cmd("~/.config/ml4w/settings/terminal.sh"))
+hl.bind(mainMod .. " + " .. "RETURN", hl.dsp.exec_cmd("~/.config/ml4w/settings/terminal.sh"), { description = "Open the terminal" })
 
--- Open the terminal
+hl.bind(mainMod .. " + " .. "B", hl.dsp.exec_cmd("~/.config/ml4w/settings/browser.sh"), { description = "Open the browser" })
 
-hl.bind(mainMod .. " + " .. "B", hl.dsp.exec_cmd("~/.config/ml4w/settings/browser.sh"))
+hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/filemanager.sh"), { description = "Open the filemanager" })
 
--- Open the browser
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/emojipicker.sh"), { description = "Open the emoji picker" })
 
-hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/filemanager.sh"))
-
--- Open the filemanager
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/emojipicker.sh"))
-
--- Open the emoji picker
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "C", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"))
-
--- Open the calculator
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "C", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"), { description = "Open the calculator" })
 
 -- Windows
 
-hl.bind(mainMod .. " + " .. "Q", hl.dsp.window.close())
+hl.bind(mainMod .. " + " .. "Q", hl.dsp.window.close(), { description = "Kill active window" })
 
--- Kill active window
+hl.bind(mainMod .. " + " .. "F", hl.dsp.window.fullscreen(), { description = "Set active window to fullscreen" })
 
-hl.bind(mainMod .. " + " .. "F", hl.dsp.window.fullscreen())
+hl.bind(mainMod .. " + " .. "T", hl.dsp.window.float(), { description = "Toggle active windows into floating mode" })
 
--- Set active window to fullscreen
-
-hl.bind(mainMod .. " + " .. "T", hl.dsp.window.float())
-
--- Toggle active windows into floating mode
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "T", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggleallfloat.sh"))
-
--- Toggle all windows into floating mode
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "T", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggleallfloat.sh"), { description = "Toggle all windows into floating mode" })
 
 --bind = $mainMod, J, togglesplit # Toggle split
 
-hl.bind(mainMod .. " + " .. "left", hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + " .. "left", hl.dsp.focus({ direction = "left" }), { description = "Move focus left" })
 
--- Move focus left
+hl.bind(mainMod .. " + " .. "right", hl.dsp.focus({ direction = "right" }), { description = "Move focus right" })
 
-hl.bind(mainMod .. " + " .. "right", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + " .. "up", hl.dsp.focus({ direction = "up" }), { description = "Move focus up" })
 
--- Move focus right
+hl.bind(mainMod .. " + " .. "down", hl.dsp.focus({ direction = "down" }), { description = "Move focus down" })
 
-hl.bind(mainMod .. " + " .. "up", hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + " .. "mouse:272", hl.dsp.window.drag(), { mouse = true, description = "Move window with the mouse" })
 
--- Move focus up
-
-hl.bind(mainMod .. " + " .. "down", hl.dsp.focus({ direction = "down" }))
-
--- Move focus down
-
-hl.bind(mainMod .. " + " .. "mouse:272", hl.dsp.window.drag(), { mouse = true })
-
--- Move window with the mouse
-
-hl.bind(mainMod .. " + " .. "mouse:273", hl.dsp.window.resize(), { mouse = true })
-
--- Resize window with the mouse
+hl.bind(mainMod .. " + " .. "mouse:273", hl.dsp.window.resize(), { mouse = true, description = "Resize window with the mouse" })
 
 -- `resizeactive, 100 0` is a delta, which is `relative = true` here.
 -- (Without it, x/y are read as an absolute target size.)
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "right", hl.dsp.window.resize({ x = 100, y = 0, relative = true }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "right", hl.dsp.window.resize({ x = 100, y = 0, relative = true }), { description = "Increase window width with keyboard" })
 
--- Increase window width with keyboard
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "left", hl.dsp.window.resize({ x = -100, y = 0, relative = true }), { description = "Reduce window width with keyboard" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "left", hl.dsp.window.resize({ x = -100, y = 0, relative = true }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "down", hl.dsp.window.resize({ x = 0, y = 100, relative = true }), { description = "Increase window height with keyboard" })
 
--- Reduce window width with keyboard
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "up", hl.dsp.window.resize({ x = 0, y = -100, relative = true }), { description = "Reduce window height with keyboard" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "down", hl.dsp.window.resize({ x = 0, y = 100, relative = true }))
-
--- Increase window height with keyboard
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "up", hl.dsp.window.resize({ x = 0, y = -100, relative = true }))
-
--- Reduce window height with keyboard
-
-hl.bind(mainMod .. " + " .. "G", hl.dsp.group.toggle())
-
--- Toggle window group
+hl.bind(mainMod .. " + " .. "G", hl.dsp.group.toggle(), { description = "Toggle window group" })
 
 -- Actions
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "A", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-animations.sh"))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "A", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-animations.sh"), { description = "Toggle animations" })
 
--- Toggle animations
+hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"), { description = "Take a screenshot" })
 
-hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wlogout"), { description = "Start wlogout" })
 
--- Take a screenshot
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("waypaper --random"), { description = "Change the wallpaper" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wlogout"))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("waypaper"), { description = "Open wallpaper selector" })
 
--- Start wlogout
+hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper-automation.sh"), { description = "Start random wallpaper script" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("waypaper --random"))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("rofi -show drun -replace -i"), { description = "Open application launcher" })
 
--- Change the wallpaper
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybindings.sh"), { description = "Show keybindings" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("waypaper"))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/launch.sh"), { description = "Reload waybar" })
 
--- Open wallpaper selector
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/toggle.sh"), { description = "Toggle waybar" })
 
-hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper-automation.sh"))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "R", hl.dsp.exec_cmd("~/.config/hypr/scripts/loadconfig.sh"), { description = "Reload hyprland config" })
 
--- Start random wallpaper script
+hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("~/.config/ml4w/scripts/cliphist.sh"), { description = "Open clipboard manager" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("rofi -show drun -replace -i"))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "T", hl.dsp.exec_cmd("~/.config/waybar/themeswitcher.sh"), { description = "Open waybar theme switcher" })
 
--- Open application launcher
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"), { description = "Open ML4W Dotfiles Settings app" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybindings.sh"))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/hyprshade.sh"), { description = "Toggle screenshader" })
 
--- Show keybindings
+hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "G", hl.dsp.exec_cmd("~/.config/hypr/scripts/gamemode.sh"), { description = "Toggle game mode" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/launch.sh"))
-
--- Reload waybar
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/toggle.sh"))
-
--- Toggle waybar
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "R", hl.dsp.exec_cmd("~/.config/hypr/scripts/loadconfig.sh"))
-
--- Reload hyprland config
-
-hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("~/.config/ml4w/scripts/cliphist.sh"))
-
--- Open clipboard manager
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "T", hl.dsp.exec_cmd("~/.config/waybar/themeswitcher.sh"))
-
--- Open waybar theme switcher
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"))
-
--- Open ML4W Dotfiles Settings app
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/hyprshade.sh"))
-
--- Toggle screenshader
-
-hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "G", hl.dsp.exec_cmd("~/.config/hypr/scripts/gamemode.sh"))
-
--- Toggle game mode
-
-hl.bind(mainMod .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-tv.sh"))
-
--- Toggle moving workspace to tv
+hl.bind(mainMod .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-tv.sh"), { description = "Toggle moving workspace to tv" })
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "L", hl.dsp.exec_cmd(
     "alacritty --class dotfiles-floating -e bash -c " ..
-    "'~/.config/hypr/scripts/list-windows.sh; echo; read -n1 -s -r -p \"Press any key to close...\"'"))
-
--- List all windows grouped by workspace
+    "'~/.config/hypr/scripts/list-windows.sh; echo; read -n1 -s -r -p \"Press any key to close...\"'"), { description = "List all windows grouped by workspace" })
 
 -- Workspaces
 
-hl.bind(mainMod .. " + " .. 1, hl.dsp.focus({ workspace = 1 }))
+hl.bind(mainMod .. " + " .. 1, hl.dsp.focus({ workspace = 1 }), { description = "Open workspace 1" })
 
--- Open workspace 1
+hl.bind(mainMod .. " + " .. 2, hl.dsp.focus({ workspace = 2 }), { description = "Open workspace 2" })
 
-hl.bind(mainMod .. " + " .. 2, hl.dsp.focus({ workspace = 2 }))
+hl.bind(mainMod .. " + " .. 3, hl.dsp.focus({ workspace = 3 }), { description = "Open workspace 3" })
 
--- Open workspace 2
+hl.bind(mainMod .. " + " .. 4, hl.dsp.focus({ workspace = 4 }), { description = "Open workspace 4" })
 
-hl.bind(mainMod .. " + " .. 3, hl.dsp.focus({ workspace = 3 }))
+hl.bind(mainMod .. " + " .. 5, hl.dsp.focus({ workspace = 5 }), { description = "Open workspace 5" })
 
--- Open workspace 3
+hl.bind(mainMod .. " + " .. 6, hl.dsp.focus({ workspace = 6 }), { description = "Open workspace 6" })
 
-hl.bind(mainMod .. " + " .. 4, hl.dsp.focus({ workspace = 4 }))
+hl.bind(mainMod .. " + " .. 7, hl.dsp.focus({ workspace = 7 }), { description = "Open workspace 7" })
 
--- Open workspace 4
+hl.bind(mainMod .. " + " .. 8, hl.dsp.focus({ workspace = 8 }), { description = "Open workspace 8" })
 
-hl.bind(mainMod .. " + " .. 5, hl.dsp.focus({ workspace = 5 }))
+hl.bind(mainMod .. " + " .. 9, hl.dsp.focus({ workspace = 9 }), { description = "Open workspace 9" })
 
--- Open workspace 5
+hl.bind(mainMod .. " + " .. 0, hl.dsp.focus({ workspace = 10 }), { description = "Open workspace 10" })
 
-hl.bind(mainMod .. " + " .. 6, hl.dsp.focus({ workspace = 6 }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 1, hl.dsp.window.move({ workspace = 1 }), { description = "Move active window to workspace 1" })
 
--- Open workspace 6
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 2, hl.dsp.window.move({ workspace = 2 }), { description = "Move active window to workspace 2" })
 
-hl.bind(mainMod .. " + " .. 7, hl.dsp.focus({ workspace = 7 }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 3, hl.dsp.window.move({ workspace = 3 }), { description = "Move active window to workspace 3" })
 
--- Open workspace 7
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 4, hl.dsp.window.move({ workspace = 4 }), { description = "Move active window to workspace 4" })
 
-hl.bind(mainMod .. " + " .. 8, hl.dsp.focus({ workspace = 8 }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 5, hl.dsp.window.move({ workspace = 5 }), { description = "Move active window to workspace 5" })
 
--- Open workspace 8
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 6, hl.dsp.window.move({ workspace = 6 }), { description = "Move active window to workspace 6" })
 
-hl.bind(mainMod .. " + " .. 9, hl.dsp.focus({ workspace = 9 }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 7, hl.dsp.window.move({ workspace = 7 }), { description = "Move active window to workspace 7" })
 
--- Open workspace 9
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 8, hl.dsp.window.move({ workspace = 8 }), { description = "Move active window to workspace 8" })
 
-hl.bind(mainMod .. " + " .. 0, hl.dsp.focus({ workspace = 10 }))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 9, hl.dsp.window.move({ workspace = 9 }), { description = "Move active window to workspace 9" })
 
--- Open workspace 10
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 0, hl.dsp.window.move({ workspace = 10 }), { description = "Move active window to workspace 10" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 1, hl.dsp.window.move({ workspace = 1 }))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 1, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 1"), { description = "Move all windows to workspace 1" })
 
--- Move active window to workspace 1
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 2, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 2"), { description = "Move all windows to workspace 2" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 2, hl.dsp.window.move({ workspace = 2 }))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 3, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 3"), { description = "Move all windows to workspace 3" })
 
--- Move active window to workspace 2
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 4, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 4"), { description = "Move all windows to workspace 4" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 3, hl.dsp.window.move({ workspace = 3 }))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 5, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 5"), { description = "Move all windows to workspace 5" })
 
--- Move active window to workspace 3
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 6, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 6"), { description = "Move all windows to workspace 6" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 4, hl.dsp.window.move({ workspace = 4 }))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 7, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 7"), { description = "Move all windows to workspace 7" })
 
--- Move active window to workspace 4
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 8, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 8"), { description = "Move all windows to workspace 8" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 5, hl.dsp.window.move({ workspace = 5 }))
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 9, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 9"), { description = "Move all windows to workspace 9" })
 
--- Move active window to workspace 5
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 0, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 10"), { description = "Move all windows to workspace 10" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 6, hl.dsp.window.move({ workspace = 6 }))
+hl.bind(mainMod .. " + " .. "mouse_down", hl.dsp.focus({ workspace = "e+1" }), { description = "Open next workspace" })
 
--- Move active window to workspace 6
+hl.bind(mainMod .. " + " .. "mouse_up", hl.dsp.focus({ workspace = "e-1" }), { description = "Open previous workspace" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 7, hl.dsp.window.move({ workspace = 7 }))
-
--- Move active window to workspace 7
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 8, hl.dsp.window.move({ workspace = 8 }))
-
--- Move active window to workspace 8
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 9, hl.dsp.window.move({ workspace = 9 }))
-
--- Move active window to workspace 9
-
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 0, hl.dsp.window.move({ workspace = 10 }))
-
--- Move active window to workspace 10
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 1, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 1"))
-
--- Move all windows to workspace 1
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 2, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 2"))
-
--- Move all windows to workspace 2
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 3, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 3"))
-
--- Move all windows to workspace 3
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 4, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 4"))
-
--- Move all windows to workspace 4
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 5, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 5"))
-
--- Move all windows to workspace 5
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 6, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 6"))
-
--- Move all windows to workspace 6
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 7, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 7"))
-
--- Move all windows to workspace 7
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 8, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 8"))
-
--- Move all windows to workspace 8
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 9, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 9"))
-
--- Move all windows to workspace 9
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 0, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 10"))
-
--- Move all windows to workspace 10
-
-hl.bind(mainMod .. " + " .. "mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-
--- Open next workspace
-
-hl.bind(mainMod .. " + " .. "mouse_up", hl.dsp.focus({ workspace = "e-1" }))
-
--- Open previous workspace
-
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "down", hl.dsp.focus({ workspace = "empty" }))
-
--- Open the next empty workspace
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "down", hl.dsp.focus({ workspace = "empty" }), { description = "Open the next empty workspace" })
 
 -- Passthrough SUPER KEY to Virtual Machine
 
-hl.bind(mainMod .. " + " .. "P", hl.dsp.submap("passthru"))
-
--- Passthrough SUPER key to virtual machine
+hl.bind(mainMod .. " + " .. "P", hl.dsp.submap("passthru"), { description = "Passthrough SUPER key to virtual machine" })
 
 hl.define_submap("passthru", function()
-    hl.bind("SUPER" .. " + " .. "Escape", hl.dsp.submap("reset"))
-    -- Get SUPER key back from virtual machine
+    hl.bind("SUPER" .. " + " .. "Escape", hl.dsp.submap("reset"), { description = "Get SUPER key back from virtual machine" })
 end)
 
 
 -- Fn keys
 
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -q s +10%"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -q s +10%"), { description = "Increase brightness by 10%" })
 
--- Increase brightness by 10%
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -q s 10%-"), { description = "Reduce brightness by 10%" })
 
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -q s 10%-"))
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ +5%"), { description = "Increase volume by 5%" })
 
--- Reduce brightness by 10%
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ -5%"), { description = "Reduce volume by 5%" })
 
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ +5%"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { description = "Toggle mute" })
 
--- Increase volume by 5%
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { description = "Audio play pause" })
 
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_SINK@ -5%"))
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl pause"), { description = "Audio pause" })
 
--- Reduce volume by 5%
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { description = "Audio next" })
 
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { description = "Audio previous" })
 
--- Toggle mute
+hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { description = "Toggle microphone" })
 
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"))
+hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"), { description = "Open calculator" })
 
--- Audio play pause
+hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("hyprlock"), { description = "Open screenlock" })
 
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl pause"))
-
--- Audio pause
-
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"))
-
--- Audio next
-
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"))
-
--- Audio previous
-
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"))
-
--- Toggle microphone
-
-hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"))
-
--- Open calculator
-
-hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("hyprlock"))
-
--- Open screenlock
-
-hl.bind("XF86Tools", hl.dsp.exec_cmd("alacritty --class dotfiles-floating -e ~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"))
-
--- Open ML4W Dotfiles Settings app
+hl.bind("XF86Tools", hl.dsp.exec_cmd("alacritty --class dotfiles-floating -e ~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"), { description = "Open ML4W Dotfiles Settings app" })

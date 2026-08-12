@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Lint only what is being committed, so pre-existing noise elsewhere in the
+# tree never blocks an unrelated commit.
+
+set -uo pipefail
+
+hooks_dir=$(dirname "$0")
+
+mapfile -t staged < <(git diff --cached --name-only --diff-filter=ACMR)
+[ "${#staged[@]}" -eq 0 ] && exit 0
+
+exec "$hooks_dir/lint-hyprctl.sh" "${staged[@]}"
