@@ -22,8 +22,12 @@
     // ultrawide stops advertising what is open on the TV.
     "all-outputs": false,
     // Show an icon per window inside each workspace pill, so the bar says what
-    // is running where without having to go and look.
-    "format": "{icon} {windows}",
+    // is running where without having to go and look. The leading {id} is on
+    // trial: now that each screen owns a fixed block of ids it tells you which
+    // MOD+<n> gets you back here. Swap it for "{icon} {windows}" to go back to
+    // icons only -- {icon} being the state glyph from format-icons below, which
+    // is redundant with the active pill's own styling.
+    "format": "{id} {windows}",
     "format-window-separator": " ",
     // U+F2D0 window-maximize, for anything not matched below.
     "window-rewrite-default": "\uf2d0",
