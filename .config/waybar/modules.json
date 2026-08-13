@@ -8,11 +8,19 @@
 {
   // Workspaces
   "hyprland/workspaces": {
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"r-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"r+1\" })'",
+    // Scrolling walks the workspaces of one screen, and going up past the last
+    // one makes a new workspace there -- see scripts/ws-scroll.sh. Hyprland's
+    // built-in "m+1"/"m-1" would do the walking but only ever wrap, so there
+    // would be no way to grow a row by scrolling. To swap the directions, swap
+    // next and prev here. Hyprland's focused monitor follows the cursor, and
+    // that includes hovering a bar, so a scroll drives the screen it happens on.
+    "on-scroll-up": "~/.config/hypr/scripts/ws-scroll.sh next",
+    "on-scroll-down": "~/.config/hypr/scripts/ws-scroll.sh prev",
     "on-click": "activate",
     "active-only": false,
-    "all-outputs": true,
+    // Each bar lists only the workspaces living on its own monitor, so the
+    // ultrawide stops advertising what is open on the TV.
+    "all-outputs": false,
     // Show an icon per window inside each workspace pill, so the bar says what
     // is running where without having to go and look.
     "format": "{icon} {windows}",
@@ -35,9 +43,11 @@
       "active": "",
       "default": ""
     },
-    "persistent-workspaces": {
-            "*": 5
-    }
+    // No persistent-workspaces: the old `"*": 5` reserved ids 1-5 on *every*
+    // bar, so DP-1 kept drawing a button for workspace 4 -- windows, active
+    // highlight and all -- while that workspace actually sat on DP-3. Each bar
+    // now lists just what exists on its own monitor.
+    "sort-by": "number"
   },
 
   // Taskbar

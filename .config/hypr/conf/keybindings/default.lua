@@ -171,11 +171,21 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 9, hl.dsp.exec_cmd("~/.config/hyp
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 0, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 10"), { description = "Move all windows to workspace 10" })
 
-hl.bind(mainMod .. " + " .. "mouse_down", hl.dsp.focus({ workspace = "e+1" }), { description = "Open next workspace" })
+-- Same script the waybar pills scroll with, so the wheel means one thing
+-- everywhere: up walks forward through this monitor's workspaces and makes a
+-- new one past the end, down walks back. "e+1"/"e-1" used to walk every id on
+-- every screen, which now that each monitor owns a block (conf/workspaces)
+-- would keep throwing focus onto the other panel.
 
-hl.bind(mainMod .. " + " .. "mouse_up", hl.dsp.focus({ workspace = "e-1" }), { description = "Open previous workspace" })
+hl.bind(mainMod .. " + " .. "mouse_up", hl.dsp.exec_cmd("~/.config/hypr/scripts/ws-scroll.sh next"), { description = "Open next workspace on this monitor (creates one past the end)" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "down", hl.dsp.focus({ workspace = "empty" }), { description = "Open the next empty workspace" })
+hl.bind(mainMod .. " + " .. "mouse_down", hl.dsp.exec_cmd("~/.config/hypr/scripts/ws-scroll.sh prev"), { description = "Open previous workspace on this monitor" })
+
+-- "empty" means the first empty workspace anywhere, which since the workspaces
+-- became persistent is always the second slot of the leftmost monitor -- press
+-- it on the 4K and focus jumped to the ultrawide. "emptym" keeps it local.
+
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "down", hl.dsp.focus({ workspace = "emptym" }), { description = "Open the next empty workspace on this monitor" })
 
 -- Passthrough SUPER KEY to Virtual Machine
 

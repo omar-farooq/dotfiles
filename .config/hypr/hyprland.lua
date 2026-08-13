@@ -57,6 +57,7 @@ require("conf.keyboard")
 -- Load configuration files
 -- -----------------------------------------------------
 require("conf.window")
+require("conf.workspace")
 require("conf.decoration")
 require("conf.layout")
 require("conf.misc")
