@@ -40,8 +40,9 @@ Drawer {
     IconButton {
         icon: Icons.shader
 
+        // Left toggles the current filter, right steps to the next one.
         onClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/hyprshade.sh`])
-        onRightClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/hyprshade.sh`, "rofi"])
+        onRightClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/hyprshade.sh`, "next"])
     }
 
     IconButton {

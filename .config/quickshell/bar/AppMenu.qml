@@ -9,7 +9,7 @@ Pill {
     accent: Theme.surfaceStrong
 
     onClicked: Launcher.toggle()
-    onRightClicked: Quickshell.execDetached([`${Quickshell.env("HOME")}/.config/hypr/scripts/keybindings.sh`])
+    onRightClicked: Keybinds.toggle()
 
     BarText {
         text: "Apps"

@@ -73,7 +73,31 @@ hl.bind(mainMod .. " + " .. "G", hl.dsp.group.toggle(), { description = "Toggle 
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "A", hl.dsp.exec_cmd("~/.config/hypr/scripts/toggle-animations.sh"), { description = "Toggle animations" })
 
-hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"), { description = "Take a screenshot" })
+-- Screenshots.
+--
+-- These replaced scripts/screenshot.sh, which asked four nested rofi questions
+-- (capture or timer, then which area, then copy or save or edit) before taking
+-- a picture -- so it never got used. A key each instead, with the common case
+-- on the bare PRINT key.
+--
+-- `--freeze` holds the screen still during selection, which is the only way to
+-- capture an open menu or a hover state. Filenames are passed explicitly:
+-- grimblast's default is `date -Ins`, which puts colons in the name and lands
+-- wherever XDG_PICTURES_DIR happens to point.
+
+local SHOT = "$HOME/Pictures/screenshot_$(date +%Y%m%d_%H%M%S).png"
+
+hl.bind("PRINT", hl.dsp.exec_cmd("grimblast --freeze --notify copy area"), { description = "Screenshot a region to the clipboard" })
+
+hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd("grimblast --freeze --notify copysave area \"" .. SHOT .. "\""), { description = "Screenshot a region to clipboard and file" })
+
+-- Annotate: grimblast writes the capture to stdout and satty picks it up for
+-- arrows, text and blur, then copies on save.
+hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd(
+    "grimblast --freeze save area - | satty --filename - --early-exit --copy-command wl-copy " ..
+    "--output-filename \"" .. SHOT .. "\""), { description = "Screenshot a region and annotate it" })
+
+hl.bind("CTRL + PRINT", hl.dsp.exec_cmd("grimblast --notify copy output"), { description = "Screenshot this monitor to the clipboard" })
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wleave"), { description = "Start wleave (power menu)" })
 
@@ -85,7 +109,7 @@ hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hy
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("qs ipc call launcher toggle"), { description = "Open application launcher" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybindings.sh"), { description = "Show keybindings" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("qs ipc call keybinds toggle"), { description = "Show keybindings" })
 
 -- Quickshell already hot-reloads when its files change, so this is only for
 -- picking up things it cannot see -- a new font, a changed monitor layout.

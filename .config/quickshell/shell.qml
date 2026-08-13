@@ -22,6 +22,7 @@ import "root:/bar"
 import "root:/notifications"
 import "root:/launcher"
 import "root:/clipboard"
+import "root:/keybinds"
 import "root:/services"
 
 ShellRoot {
@@ -72,6 +73,8 @@ ShellRoot {
 
     ClipboardWindow {}
 
+    KeybindsWindow {}
+
     IpcHandler {
         target: "launcher"
 
@@ -94,6 +97,17 @@ ShellRoot {
         function close(): void {
             Clipboard.hide();
         }
+    }
 
+    IpcHandler {
+        target: "keybinds"
+
+        function toggle(): void {
+            Keybinds.toggle();
+        }
+
+        function close(): void {
+            Keybinds.hide();
+        }
     }
 }

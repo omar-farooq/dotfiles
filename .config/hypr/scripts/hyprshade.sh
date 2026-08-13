@@ -7,24 +7,52 @@
 #        |___/|_|                                    
 # 
 
-if [[ "$1" == "rofi" ]]; then
+# `next` advances to the following filter and leaves it selected for the
+# toggle below. This replaced a rofi picker: with only three filters installed
+# (blue-light-filter, invert-colors, vibrance) a list to choose from was more
+# ceremony than the choice deserved, and it was the last thing keeping rofi in
+# this script.
+if [[ "$1" == "next" ]]; then
 
-    # Open rofi to select the Hyprshade filter for toggle
-    options="$(hyprshade ls)\noff"
-    
-    # Open rofi
-    choice=$(echo -e "$options" | rofi -dmenu -replace -config ~/.config/rofi/config-hyprshade.rasi -i -no-show-icons -l 4 -width 30 -p "Hyprshade") 
-    if [ ! -z $choice ] ;then
-        echo "hyprshade_filter=\"$choice\"" > ~/.config/ml4w/settings/hyprshade.sh
-        if [ "$choice" == "off" ] ;then
-            hyprshade off
-            notify-send "Hyprshade deactivated"
-            echo ":: hyprshade turned off"            
-        else
-            notify-send "Changing Hyprshade to $choice" "Toggle shader with SUPER+SHIFT+S"
-        fi
+    # `hyprshade ls` decorates its output: every line is indented, and the
+    # active filter is marked with a leading "* ". Both have to come off before
+    # the name is usable. Leaving the indent makes `hyprshade on "  vibrance"`
+    # fail silently; leaving the asterisk is worse -- it sets a shader path that
+    # does not exist, which Hyprland reports as a parser error across the top of
+    # the screen. The marker also moves as the active filter changes, so
+    # stripping it is what keeps the cycle order stable.
+    mapfile -t filters < <(hyprshade ls | sed 's/^[[:space:]*]*//; s/[[:space:]]*$//' | grep -v '^$')
+    filters+=("off")
+
+    current_filter="blue-light-filter"
+    if [ -f ~/.config/ml4w/settings/hyprshade.sh ]; then
+        source ~/.config/ml4w/settings/hyprshade.sh
+        current_filter="$hyprshade_filter"
     fi
-    
+
+    # Find where we are and step one along, wrapping. An unrecognised saved
+    # value lands on index 0, which is a reasonable place to restart from.
+    next_index=0
+    for i in "${!filters[@]}"; do
+        if [[ "${filters[$i]}" == "$current_filter" ]]; then
+            next_index=$(( (i + 1) % ${#filters[@]} ))
+            break
+        fi
+    done
+
+    choice="${filters[$next_index]}"
+    echo "hyprshade_filter=\"$choice\"" > ~/.config/ml4w/settings/hyprshade.sh
+
+    # Apply straight away rather than waiting for the next toggle, so cycling
+    # shows you each filter as you pass through it.
+    if [[ "$choice" == "off" ]]; then
+        hyprshade off
+        notify-send "Screen shader off"
+    else
+        hyprshade on "$choice"
+        notify-send "Screen shader" "$choice"
+    fi
+
 else
 
     # Toggle Hyprshade based on the selected filter
