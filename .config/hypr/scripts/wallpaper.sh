@@ -87,7 +87,7 @@ if [ -f $wallpaper_effect ] ;then
             echo ":: Use cached wallpaper $effect-$wallpaper_filename"
         else
             echo ":: Generate new cached wallpaper $effect-$wallpaper_filename with effect $effect"
-            dunstify "Using wallpaper effect $effect..." "with image $wallpaper_filename" -h int:value:10 -h string:x-dunst-stack-tag:wallpaper
+            notify-send "Using wallpaper effect $effect..." "with image $wallpaper_filename" -h int:value:10 -h string:x-dunst-stack-tag:wallpaper
             source $HOME/.config/hypr/effects/wallpaper/$effect
         fi
         echo ":: Loading wallpaper $generated_versions/$effect-$wallpaper_filename with effect $effect"

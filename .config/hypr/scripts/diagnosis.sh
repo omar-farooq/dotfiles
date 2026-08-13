@@ -34,7 +34,7 @@ _folderExists() {
 }
 
 _commandExists "rofi" "rofi-wayland"
-_commandExists "dunst" "dunst"
+_commandExists "notify-send" "libnotify"
 _commandExists "qs" "quickshell"
 _commandExists "hyprpaper" "hyprpaper"
 _commandExists "hyprlock" "hyprpaper"

@@ -50,13 +50,10 @@ Pill {
     // Scroll to adjust -- new; waybar had scroll-step commented out. Capped at
     // 1.0 rather than letting PipeWire's software boost past 100%, which is an
     // easy way to distort the output by leaning on the wheel.
-    WheelHandler {
-        onWheel: event => {
-            if (!root.audio)
-                return;
+    onWheel: delta => {
+        if (!root.audio)
+            return;
 
-            const step = event.angleDelta.y > 0 ? 0.02 : -0.02;
-            root.audio.volume = Math.max(0, Math.min(1, root.audio.volume + step));
-        }
+        root.audio.volume = Math.max(0, Math.min(1, root.audio.volume + (delta > 0 ? 0.02 : -0.02)));
     }
 }

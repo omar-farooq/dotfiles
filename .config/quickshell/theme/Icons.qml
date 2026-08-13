@@ -45,4 +45,11 @@ Singleton {
     readonly property string headset: "\uf590"
     readonly property string phone: "\uf095"
     readonly property string car: "\uf1b9"
+    // Media. The Spotify mark is the same codepoint the workspace pills use for
+    // a Spotify window, which is deliberate -- one app, one glyph.
+    readonly property string spotify: "\uf1bc"
+    readonly property string play: "\uf04b"
+    readonly property string pause: "\uf04c"
+    // Launcher
+    readonly property string search: "\uf002"
 }

@@ -67,6 +67,7 @@ Singleton {
 
     readonly property color surface: wal.color5         // ordinary pills
     readonly property color surfaceStrong: wal.color11  // pills that should read as anchors
+    readonly property color background: wal.background  // panels large enough to need a ground
     readonly property color text: "#FFFFFF"
     readonly property color danger: "#DC2F2F"
     readonly property color warning: "#FF9A3C"

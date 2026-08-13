@@ -4,6 +4,13 @@
 // #network, #pulseaudio, #battery, #backlight and the rest were all "background
 // colour, 15px radius, 0.8 opacity, the same padding". One component instead,
 // so the bar's shape is a single edit.
+//
+// Input note: this uses MouseArea rather than Qt's newer pointer handlers
+// (TapHandler / WheelHandler / HoverHandler) throughout, and so does the rest
+// of the bar. Pointer handlers do not receive events on these layer-shell
+// surfaces -- a WheelHandler placed here logged nothing across dozens of
+// scrolls while a MouseArea in the same position caught every one. Clicks
+// looked fine only because they were already going through a MouseArea.
 
 import QtQuick
 import "root:/theme"
@@ -13,9 +20,14 @@ Rectangle {
 
     // Children go into the inner Row. Note the `data: [...]` block further
     // down: once a component aliases its default property, everything declared
-    // inside this file would land in that alias too, so the Row and the
-    // MouseArea have to be assigned to `data` explicitly to stay out of it.
+    // inside this file would land in that alias too, so the internals have to
+    // be assigned to `data` explicitly to stay out of it.
     default property alias content: layout.data
+
+    // Anything that must sit above the content and cover the whole pill. Drawer
+    // uses it to sense hover without the pointer crossing a child button
+    // stealing the hover and collapsing the drawer mid-reach.
+    property alias overlay: overlaySlot.data
 
     property color accent: Theme.surface
     property bool interactive: true
@@ -26,6 +38,10 @@ Rectangle {
     signal clicked
     signal rightClicked
     signal middleClicked
+
+    // Positive delta is a scroll up. Emitted here rather than handled in each
+    // module so the whole pill responds, padding and rounded ends included.
+    signal wheel(int delta)
 
     implicitWidth: layout.implicitWidth + padding * 2
     implicitHeight: Theme.pillHeight
@@ -48,9 +64,14 @@ Rectangle {
 
             anchors.fill: parent
             hoverEnabled: true
-            enabled: root.interactive
-            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-            cursorShape: Qt.PointingHandCursor
+
+            // Always enabled, because this is what carries hover and the wheel
+            // as well as clicks. `interactive` only decides whether a click
+            // means anything -- a non-interactive pill still scrolls.
+            acceptedButtons: root.interactive ? (Qt.LeftButton | Qt.RightButton | Qt.MiddleButton) : Qt.NoButton
+            cursorShape: root.interactive ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+            onWheel: event => root.wheel(event.angleDelta.y)
 
             onClicked: event => {
                 if (event.button === Qt.LeftButton)
@@ -66,6 +87,11 @@ Rectangle {
 
             anchors.centerIn: parent
             spacing: 6
+        },
+        Item {
+            id: overlaySlot
+
+            anchors.fill: parent
         }
     ]
 }

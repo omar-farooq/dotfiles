@@ -83,7 +83,7 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("waypaper"),
 
 hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper-automation.sh"), { description = "Start random wallpaper script" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("rofi -show drun -replace -i"), { description = "Open application launcher" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("qs ipc call launcher toggle"), { description = "Open application launcher" })
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybindings.sh"), { description = "Show keybindings" })
 

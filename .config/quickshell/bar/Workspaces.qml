@@ -94,7 +94,7 @@ Pill {
 
             // The focused workspace is opaque, the rest recede. Same three-step
             // treatment the waybar CSS used -- active 1.0, hover 0.7, idle 0.4.
-            color: Qt.rgba(Theme.surfaceStrong.r, Theme.surfaceStrong.g, Theme.surfaceStrong.b, button.current ? 1.0 : (hover.hovered ? 0.7 : 0.4))
+            color: Qt.rgba(Theme.surfaceStrong.r, Theme.surfaceStrong.g, Theme.surfaceStrong.b, button.current ? 1.0 : (hover.containsMouse ? 0.7 : 0.4))
 
             Behavior on color {
                 ColorAnimation {
@@ -109,14 +109,19 @@ Pill {
                 }
             }
 
-            HoverHandler {
+            // MouseArea, not TapHandler/HoverHandler -- see the input note in
+            // Pill.qml. The wheel is forwarded up by hand because this sits on
+            // top of the pill's own MouseArea, and a MouseArea swallows wheel
+            // events whether or not it does anything with them.
+            MouseArea {
                 id: hover
 
+                anchors.fill: parent
+                hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-            }
 
-            TapHandler {
-                onTapped: button.modelData.activate()
+                onClicked: button.modelData.activate()
+                onWheel: event => root.wheel(event.angleDelta.y)
             }
 
             // Two items rather than one string: the id wants Fira Sans and the
@@ -147,20 +152,20 @@ Pill {
         }
     }
 
-    // (2) Scrolling. Parented to the inner Row, which covers everything but the
-    // 3px of padding, so effectively the whole pill.
+    // (2) Scrolling. Pill emits this for the whole pill area, padding included.
     //
     // This shells out to ws-scroll.sh rather than dispatching from here because
     // the script also knows which ids conf/workspaces/default.lua pins to other
     // monitors: going past the end of a row mints a genuinely free id instead
     // of stealing a slot that belongs to another screen and dragging that
     // workspace over. Reimplementing that in QML would be a second copy of the
-    // rule to keep in step. Hyprland's focused monitor follows the cursor, and
-    // that includes hovering a bar, so the script acts on the screen being
-    // scrolled.
-    WheelHandler {
-        onWheel: event => {
-            Quickshell.execDetached([`${Quickshell.env("HOME")}/.config/hypr/scripts/ws-scroll.sh`, event.angleDelta.y > 0 ? "next" : "prev"]);
-        }
+    // rule to keep in step.
+    //
+    // The screen is passed explicitly. The script used to infer it from which
+    // monitor had focus, on the assumption that hovering a bar moves focus
+    // there -- but conf/keyboard.lua sets input:mouse_refocus = false, so that
+    // does not hold, and scrolling one bar could walk another screen's row.
+    onWheel: delta => {
+        Quickshell.execDetached([`${Quickshell.env("HOME")}/.config/hypr/scripts/ws-scroll.sh`, delta > 0 ? "next" : "prev", root.screen.name]);
     }
 }

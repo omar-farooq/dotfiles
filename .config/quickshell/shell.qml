@@ -1,5 +1,13 @@
+//@ pragma UseQApplication
+
 // Root of the Quickshell config -- the replacement for waybar and the ml4w
 // theme machinery that wrapped it.
+//
+// QApplication mode is required for the system tray: right-clicking a tray icon
+// asks the owning application to draw its own menu, and that goes through Qt's
+// platform menu support, which only exists under QApplication. Without the
+// pragma the icons appear and left-click works, but every context menu fails.
+// Changing this line needs a real restart -- a hot reload will not pick it up.
 //
 // Run it with a bare `qs` (this lives at ~/.config/quickshell, which is the
 // default config path). To try a change without disturbing the running bar,
@@ -11,6 +19,9 @@
 import Quickshell
 import Quickshell.Io
 import "root:/bar"
+import "root:/notifications"
+import "root:/launcher"
+import "root:/services"
 
 ShellRoot {
     id: root
@@ -23,19 +34,15 @@ ShellRoot {
     // launch.sh checked on next startup, because there was no way to talk to a
     // running bar. Here it is a property, so the bar comes back in the state it
     // left rather than being rebuilt from scratch.
+    //
+    // Nothing here is called `show` or `hide`: `qs ipc` has its own `show`
+    // subcommand, so `qs ipc call bar show` parses ambiguously and silently
+    // prints the target listing instead of calling anything.
     IpcHandler {
         target: "bar"
 
         function toggle(): void {
             root.barVisible = !root.barVisible;
-        }
-
-        function show(): void {
-            root.barVisible = true;
-        }
-
-        function hide(): void {
-            root.barVisible = false;
         }
 
         function reload(): void {
@@ -52,6 +59,25 @@ ShellRoot {
 
         Bar {
             visible: root.barVisible
+        }
+    }
+
+    // Not per-screen: notifications land on one fixed output, the way dunst was
+    // configured. See NotificationOverlay.
+    NotificationOverlay {}
+
+    // One launcher, moved to whichever screen has focus when it opens.
+    LauncherWindow {}
+
+    IpcHandler {
+        target: "launcher"
+
+        function toggle(): void {
+            Launcher.toggle();
+        }
+
+        function close(): void {
+            Launcher.hide();
         }
     }
 }

@@ -2,13 +2,13 @@
 
 import Quickshell
 import "root:/theme"
+import "root:/services"
 import "root:/components"
 
 Pill {
     accent: Theme.surfaceStrong
 
-    // `-replace` so clicking twice doesn't stack instances.
-    onClicked: Quickshell.execDetached(["rofi", "-show", "drun", "-replace"])
+    onClicked: Launcher.toggle()
     onRightClicked: Quickshell.execDetached([`${Quickshell.env("HOME")}/.config/hypr/scripts/keybindings.sh`])
 
     BarText {

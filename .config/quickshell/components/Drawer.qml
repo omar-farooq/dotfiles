@@ -20,19 +20,31 @@ Pill {
 
     property string icon: ""
 
-    readonly property bool expanded: hover.hovered
+    readonly property bool expanded: sensor.containsMouse
 
     interactive: false
     padding: 8
     spacing: 0
 
+    // Hover is sensed by one MouseArea covering the whole pill, sitting above
+    // the contents. Letting the drawer's own buttons sense it instead does not
+    // work: the topmost item under the pointer takes the hover, so the moment
+    // you reached for a button the pill beneath it would go unhovered and the
+    // drawer would shut in your hand. Qt.NoButton means presses fall straight
+    // through to the buttons underneath, so they still click.
+    overlay: [
+        MouseArea {
+            id: sensor
+
+            anchors.fill: parent
+            hoverEnabled: true
+            acceptedButtons: Qt.NoButton
+
+            onWheel: event => root.wheel(event.angleDelta.y)
+        }
+    ]
+
     content: [
-        // Parented to Pill's inner Row, so it senses hover across the handle
-        // and the revealed contents alike -- which is what keeps the drawer
-        // open while the pointer travels into it.
-        HoverHandler {
-            id: hover
-        },
         // The clip is what makes this a drawer rather than a fade: the contents
         // keep their real width and get cropped, so they slide out from under
         // the handle instead of squashing.

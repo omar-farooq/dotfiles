@@ -60,7 +60,12 @@
 -- Autostart
 hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-    hl.exec_cmd("dunst")
+    -- No notification daemon here any more: Quickshell owns
+    -- org.freedesktop.Notifications itself (see quickshell/services/
+    -- Notifications.qml). Only one process can hold that name, so starting
+    -- dunst as well would mean whichever won the race got the notifications.
+    -- dunst is still installed; drop `qs -d -n` below and put this back to
+    -- return to it.
     hl.exec_cmd("~/.config/hypr/scripts/gtk.sh")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("wl-paste --watch cliphist store")

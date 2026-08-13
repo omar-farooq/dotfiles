@@ -8,17 +8,26 @@
 #
 # Move between the workspaces of one monitor, for the bar's scroll wheel.
 #
-#   ws-scroll.sh next   forward; past the last workspace it makes a new one
-#   ws-scroll.sh prev   backward; stops at the first, it does not wrap round
+#   ws-scroll.sh next [monitor]   forward; past the last workspace it makes a new one
+#   ws-scroll.sh prev [monitor]   backward; stops at the first, it does not wrap round
 #
-# Only "next" creates, so a workspace is never made on the way back. Hyprland's
-# focused monitor follows the cursor -- hovering a bar is enough -- so this
-# always acts on the screen whose bar is being scrolled.
+# Only "next" creates, so a workspace is never made on the way back.
+#
+# The optional monitor names the screen to walk. The bar passes its own, because
+# a bar knows which screen it is drawn on -- and the *focused* monitor is a
+# different thing. This used to rely on focus following the cursor onto the
+# hovered bar, but conf/keyboard.lua sets input:mouse_refocus = false, so
+# hovering a bar does not necessarily move focus, and a scroll on one screen's
+# bar could quietly walk another screen's row instead. With no monitor given --
+# the keybind case, which has no screen of its own -- it falls back to the
+# focused monitor as before.
+#
 # DEPENDENCY: jq
 
 set -euo pipefail
 
 direction="${1:-next}"
+requested_monitor="${2:-}"
 
 contains() { # $1 = needle, rest = haystack
     local needle=$1
@@ -26,11 +35,19 @@ contains() { # $1 = needle, rest = haystack
     [[ " $* " == *" $needle "* ]]
 }
 
-# `monitors` carries both the focused monitor and its active workspace, so this
-# is one round trip rather than two.
-read -r monitor current < <(
-    hyprctl -j monitors | jq -r '.[] | select(.focused) | "\(.name) \(.activeWorkspace.id)"'
-)
+# `monitors` carries the focused monitor, every monitor's name and each one's
+# active workspace, so this is one round trip rather than three.
+monitors_json=$(hyprctl -j monitors)
+
+focused_monitor=$(jq -r '.[] | select(.focused) | .name' <<< "$monitors_json")
+monitor="${requested_monitor:-$focused_monitor}"
+
+current=$(jq -r --arg m "$monitor" '.[] | select(.name == $m) | .activeWorkspace.id' <<< "$monitors_json")
+
+if [[ -z $current ]]; then
+    echo "${0##*/}: no monitor named '$monitor'" >&2
+    exit 1
+fi
 
 workspaces_json=$(hyprctl -j workspaces)
 
@@ -97,4 +114,15 @@ esac
 
 # Since Hyprland 0.56 the config is Lua and `hyprctl dispatch` parses its
 # argument as Lua rather than the old `dispatch <name> <args>` syntax.
+#
+# Focus the named screen first when it is not already focused. Focusing a
+# workspace that exists elsewhere would drag focus to its monitor anyway, but
+# the "next past the end" case above focuses an id that does not exist yet, and
+# Hyprland creates such a workspace on the *focused* monitor -- so without this,
+# scrolling off the end of one screen's row would mint the new workspace on
+# whichever screen happened to hold focus.
+if [[ $monitor != "$focused_monitor" ]]; then
+    hyprctl dispatch "hl.dsp.focus({ monitor = '$monitor' })" > /dev/null
+fi
+
 hyprctl dispatch "hl.dsp.focus({ workspace = $target })" > /dev/null
