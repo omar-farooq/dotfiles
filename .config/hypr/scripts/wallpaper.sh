@@ -116,10 +116,14 @@ output=${wal_tpl//WALLPAPER/$used_wallpaper}
 echo "$output" > $HOME/.config/hypr/hyprpaper.conf
 hyprpaper & > /dev/null 2>&1
 
-# ----------------------------------------------------- 
-# Reload Waybar
 # -----------------------------------------------------
-~/.config/waybar/launch.sh
+# The bar needs no poke here any more.
+#
+# waybar had to be relaunched at this point because it only read the pywal CSS
+# once, at startup. Quickshell's theme watches ~/.cache/wal/colors-hyprland.conf
+# and recolours in place, so by the time pywal has written that file the bar has
+# already followed.
+# -----------------------------------------------------
 
 # -----------------------------------------------------
 # Created blurred wallpaper

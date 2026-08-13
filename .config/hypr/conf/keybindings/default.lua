@@ -87,15 +87,21 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("rofi -
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("~/.config/hypr/scripts/keybindings.sh"), { description = "Show keybindings" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/launch.sh"), { description = "Reload waybar" })
+-- Quickshell already hot-reloads when its files change, so this is only for
+-- picking up things it cannot see -- a new font, a changed monitor layout.
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "B", hl.dsp.exec_cmd("qs ipc call bar reload"), { description = "Reload the bar" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "B", hl.dsp.exec_cmd("~/.config/waybar/toggle.sh"), { description = "Toggle waybar" })
+-- Hides the bar rather than killing it, so it returns in the state it left.
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "B", hl.dsp.exec_cmd("qs ipc call bar toggle"), { description = "Toggle the bar" })
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "R", hl.dsp.exec_cmd("~/.config/hypr/scripts/loadconfig.sh"), { description = "Reload hyprland config" })
 
 hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("~/.config/ml4w/scripts/cliphist.sh"), { description = "Open clipboard manager" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "T", hl.dsp.exec_cmd("~/.config/waybar/themeswitcher.sh"), { description = "Open waybar theme switcher" })
+-- Dropped with waybar: the theme switcher picked one of the ml4w theme/variation
+-- pairs under ~/.config/waybar/themes. The Quickshell bar has one look, defined
+-- in theme/Theme.qml, and takes its colours from pywal like everything else --
+-- so changing the wallpaper is the theme switcher now.
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"), { description = "Open ML4W Dotfiles Settings app" })
 
@@ -171,7 +177,7 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 9, hl.dsp.exec_cmd("~/.config/hyp
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. 0, hl.dsp.exec_cmd("~/.config/hypr/scripts/moveTo.sh 10"), { description = "Move all windows to workspace 10" })
 
--- Same script the waybar pills scroll with, so the wheel means one thing
+-- Same script the bar's workspace pills scroll with, so the wheel means one thing
 -- everywhere: up walks forward through this monitor's workspaces and makes a
 -- new one past the end, down walks back. "e+1"/"e-1" used to walk every id on
 -- every screen, which now that each monitor owns a block (conf/workspaces)

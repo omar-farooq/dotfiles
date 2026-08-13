@@ -35,7 +35,7 @@ _folderExists() {
 
 _commandExists "rofi" "rofi-wayland"
 _commandExists "dunst" "dunst"
-_commandExists "waybar" "waybar"
+_commandExists "qs" "quickshell"
 _commandExists "hyprpaper" "hyprpaper"
 _commandExists "hyprlock" "hyprpaper"
 _commandExists "hypridle" "hyprpaper"

@@ -22,7 +22,7 @@ hl.config({
             new_optimizations = true,
             ignore_opacity = true,
             xray = true,
-            blurls = "waybar",
+            blurls = "quickshell",
         },
         active_opacity = 0.9,
         inactive_opacity = 0.6,

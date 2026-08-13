@@ -52,7 +52,7 @@ if hl.plugin.hyprwinwrap ~= nil then
     hl.plugin.hyprwinwrap.window({
         class  = "alacritty-cava-bg",
         layer  = 0,
-        -- Percentages of the screen. size_y = 97 would leave a strip for waybar.
+        -- Percentages of the screen. size_y = 97 would leave a strip for the bar.
         pos_x  = 0,
         pos_y  = 0,
         size_x = 100,

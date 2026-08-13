@@ -70,7 +70,12 @@ hl.on("hyprland.start", function()
     -- read; both the config and the whole AGS/Astal package stack are now gone.
     -- Waybar is the bar in use.
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("~/.config/waybar/launch.sh")
+    -- The bar. Quickshell replaced waybar and the ml4w theme machinery around
+    -- it: no launch script, because there is no theme/variation pair to resolve
+    -- and no previous instance to kill first -- `-d` detaches and `-n` makes a
+    -- second copy refuse to start rather than stacking two bars per monitor.
+    -- Config lives in ~/.config/quickshell.
+    hl.exec_cmd("qs -d -n")
     hl.exec_cmd("~/.config/hypr/scripts/cleanup.sh")
     hl.exec_cmd("hyprpm reload")
     hl.exec_cmd("~/.config/hypr/scripts/manage-cava.sh")

@@ -6,7 +6,7 @@
 #     \_/\_/ \___/|_|  |_|\_\___/ .__/ \__,_|\___\___|
 #                               |_|
 #
-# Move between the workspaces of one monitor, for waybar's scroll wheel.
+# Move between the workspaces of one monitor, for the bar's scroll wheel.
 #
 #   ws-scroll.sh next   forward; past the last workspace it makes a new one
 #   ws-scroll.sh prev   backward; stops at the first, it does not wrap round

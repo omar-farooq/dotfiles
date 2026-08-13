@@ -1,7 +1,7 @@
 ---@module 'hl'
 
 -- Every monitor owns a block of workspace ids. Two things depend on this:
--- waybar's `all-outputs: false` filters buttons by the monitor a workspace
+-- The bar's workspace row filters buttons by the monitor a workspace
 -- actually lives on, so a fixed block is what stops one screen's bar drawing
 -- another screen's windows; and MOD+<n> keeps working as an absolute jump, now
 -- with a stable meaning -- 1-3 is the ultrawide, 4-6 the right-hand 4K, 7-9 the
