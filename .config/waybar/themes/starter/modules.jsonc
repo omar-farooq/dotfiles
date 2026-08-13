@@ -171,7 +171,7 @@
     // Power Menu
     "custom/exit": {
         "format": "",
-        "on-click": "wlogout",
+        "on-click": "wleave",
         "tooltip": false
     },
 

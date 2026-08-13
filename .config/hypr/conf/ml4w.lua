@@ -104,29 +104,10 @@ hl.window_rule({
     pin = true,
 })
 
--- ML4W Hyprland App floating
-
-hl.window_rule({
-    name  = "windowrule-9",
-    match = {
-        class = "(com.ml4w.hyprland.settings)",
-    },
-    float = true,
-    size = { 700, 600 },
-    center = true,
-    pin = true,
-})
-
-hl.window_rule({
-    name  = "windowrule-10",
-    match = {
-        class = "(ml4w-hyprland-settings.py)",
-    },
-    float = true,
-    size = { 700, 600 },
-    center = true,
-    pin = true,
-})
+-- The two float rules for the ML4W Hyprland Settings app (com.ml4w.hyprland.settings
+-- and ml4w-hyprland-settings.py) were removed with the app itself: it wrote a
+-- hyprctl.json that got replayed over this config on every reload. See
+-- conf/decorations/default.lua for the two settings it used to impose.
 
 -- System Mission Center
 

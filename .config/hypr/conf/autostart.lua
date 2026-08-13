@@ -75,7 +75,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("~/.config/hypr/scripts/manage-cava.sh")
 end)
 
--- Exec (run every reload)
-hl.on("config.reloaded", function()
-    hl.exec_cmd("~/.config/ml4w-hyprland-settings/hyprctl.sh")
-end)
+-- Nothing runs on reload any more. What used to live here was the ML4W Hyprland
+-- Settings app's hyprctl.sh, which slept three seconds and then reapplied its
+-- own hyprctl.json over the top of this config -- so the file you edited was not
+-- the last word on decoration:rounding or decoration:inactive_opacity. Those two
+-- values now live in conf/decorations/default.lua, and the script, its JSON and
+-- the AppImage that generated them have been removed.

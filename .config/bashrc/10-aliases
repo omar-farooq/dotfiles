@@ -25,11 +25,12 @@ alias android-mount='aft-mtp-mount ~/mnt'
 # -----------------------------------------------------
 alias ml4w='~/.config/ml4w/apps/ML4W_Welcome-x86_64.AppImage'
 alias ml4w-settings='~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage'
-alias ml4w-hyprland='~/.config/ml4w/apps/ML4W_Hyprland_Settings-x86_64.AppImage'
 alias ml4w-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
 alias ml4w-hyprland-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
 # Removed: ml4w-update (ran update.sh, which re-cloned upstream and reinstalled
-# straight over this repo), ml4w-qtile-diagnosis (target never existed here)
+# straight over this repo), ml4w-qtile-diagnosis (target never existed here),
+# ml4w-hyprland (the Hyprland Settings app, deleted along with the hyprctl.sh
+# hook that replayed its settings over the config on every reload)
 # and ml4w-sidebar (ags v1 syntax; the installed ags is v3).
 
 # -----------------------------------------------------

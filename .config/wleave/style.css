@@ -1,0 +1,90 @@
+/*
+             _
+ __      __ | |  ___   __ _ __   __  ___
+ \ \ /\ / / | | / _ \ / _` |\ \ / / / _ \
+  \ V  V /  | ||  __/| (_| | \ V / |  __/
+   \_/\_/   |_| \___| \__,_|  \_/   \___|
+
+ Carried over from the ML4W wlogout theme. wleave is GTK4 rather than GTK3, so
+ two things changed: `background: url(...)` became `background-image`, and the
+ GTK3-only `image(url(...))` wrapper was dropped for a plain `url(...)`. Paths
+ are relative to this file, which is why the icons live beside it.
+
+ wleave also draws two labels inside each button that wlogout had no concept of
+ -- .action-name for the caption and .keybind for the shortcut hint, the latter
+ shown because layout.json sets "show-keybinds".
+*/
+
+/* Pywal colours, from the template of the same name in ~/.config/wal/templates.
+   Only regenerated when the wallpaper changes. */
+@import '../../.cache/wal/colors-wleave.css';
+
+* {
+    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    background-image: none;
+    box-shadow: none;
+}
+
+window {
+    background-image: url("../ml4w/cache/blurred_wallpaper.png");
+    background-size: cover;
+    background-position: center;
+}
+
+button {
+    margin: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    border-radius: 20px;
+    border: 3px solid #FFFFFF;
+    background-color: rgba(12, 12, 12, 0.3);
+
+    background-repeat: no-repeat;
+    background-position: center 35%;
+    background-size: 25%;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*
+ The ML4W theme accented with @color11, but pywal's numbered colours land
+ wherever the wallpaper puts them -- on this wallpaper it is #5A6592, which made
+ the focused label look disabled. @foreground is the one colour pywal picks for
+ legibility against the background, so the caption stays white and only the
+ border and keybind pill take the accent.
+*/
+button:focus,
+button:active,
+button:hover {
+    color: #FFFFFF;
+    border: 3px solid @foreground;
+    background-color: rgba(12, 12, 12, 0.5);
+}
+
+button label.action-name {
+    margin-top: 8px;
+    font-size: 20px;
+}
+
+button label.keybind {
+    margin-top: 4px;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 16px;
+    color: rgba(12, 12, 12, 0.9);
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+button:focus label.keybind,
+button:hover label.keybind {
+    color: rgba(12, 12, 12, 0.9);
+    background-color: @foreground;
+}
+
+#lock      { background-image: url("icons/lock.png"); }
+#hibernate { background-image: url("icons/hibernate.png"); }
+#logout    { background-image: url("icons/logout.png"); }
+#shutdown  { background-image: url("icons/shutdown.png"); }
+#suspend   { background-image: url("icons/suspend.png"); }
+#reboot    { background-image: url("icons/reboot.png"); }

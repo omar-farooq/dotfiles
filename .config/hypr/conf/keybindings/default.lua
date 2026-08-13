@@ -75,7 +75,7 @@ hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "A", hl.dsp.exec_cmd("~/.config/
 
 hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"), { description = "Take a screenshot" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wlogout"), { description = "Start wlogout" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wleave"), { description = "Start wleave (power menu)" })
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("waypaper --random"), { description = "Change the wallpaper" })
 

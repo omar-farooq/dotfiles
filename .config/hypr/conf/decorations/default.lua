@@ -12,9 +12,15 @@
 
 -- ----------------------------------------------------- 
 
+-- rounding and inactive_opacity used to be overwritten a few seconds into every
+-- reload by ~/.config/ml4w-hyprland-settings/hyprctl.sh, which replayed whatever
+-- the ML4W Hyprland Settings app had last written to its own hyprctl.json. The
+-- values it was applying (7 and 1.0) are now simply the values here, and that
+-- script, its JSON and the app that wrote them are gone -- so what this file
+-- says is what you get.
 hl.config({
     decoration = {
-        rounding = 10,
+        rounding = 7,
         blur = {
             enabled = true,
             size = 6,
@@ -25,7 +31,7 @@ hl.config({
             -- blurls = waybar
         },
         active_opacity = 1.0,
-        inactive_opacity = 0.8,
+        inactive_opacity = 1.0,
         fullscreen_opacity = 1.0,
         shadow = {
             range = 30,
