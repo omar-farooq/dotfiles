@@ -84,8 +84,9 @@
   },
 
   // ML4W Welcome App
-  // Left-click used to open the ags sidebar; the installed ags is v3 and the
-  // v1 sidebar config is gone, so the working action is promoted to left-click.
+  // Left-click used to open ML4W's ags sidebar. That config was v1, the packaged
+  // ags was v3, and the whole AGS/Astal stack has since been removed -- so the
+  // one action that still works is on left-click.
   "custom/ml4w-welcome": {
     "on-click": "sleep 0.1 && ~/.config/ml4w/apps/ML4W_Welcome-x86_64.AppImage",
     "format": " ",

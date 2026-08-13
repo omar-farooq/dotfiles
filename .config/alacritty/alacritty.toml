@@ -1,5 +1,6 @@
 [general]
-import = ["~/.config/alacritty/themes/themes/tokyo_night_storm.toml"]
+# Was themes/themes/tokyo_night_storm.toml. Swap back by pointing at that file.
+import = ["~/.config/alacritty/themes/pywal-headphones.toml"]
 
 [font]
 size = 12.0
