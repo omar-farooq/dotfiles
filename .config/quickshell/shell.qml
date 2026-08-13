@@ -21,6 +21,7 @@ import Quickshell.Io
 import "root:/bar"
 import "root:/notifications"
 import "root:/launcher"
+import "root:/clipboard"
 import "root:/services"
 
 ShellRoot {
@@ -66,8 +67,10 @@ ShellRoot {
     // configured. See NotificationOverlay.
     NotificationOverlay {}
 
-    // One launcher, moved to whichever screen has focus when it opens.
+    // One of each, moved to whichever screen has focus when they open.
     LauncherWindow {}
+
+    ClipboardWindow {}
 
     IpcHandler {
         target: "launcher"
@@ -79,5 +82,18 @@ ShellRoot {
         function close(): void {
             Launcher.hide();
         }
+    }
+
+    IpcHandler {
+        target: "clipboard"
+
+        function toggle(): void {
+            Clipboard.toggle();
+        }
+
+        function close(): void {
+            Clipboard.hide();
+        }
+
     }
 }

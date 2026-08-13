@@ -104,6 +104,10 @@ Singleton {
     readonly property string textFont: "Fira Sans"
     readonly property string iconFont: "Font Awesome 7 Free Solid"
 
+    // For content that was typed rather than written -- clipboard entries,
+    // mostly, where a proportional font makes a command line hard to scan.
+    readonly property string monoFont: "FiraCode Nerd Font"
+
     readonly property int fontSize: 13
     readonly property int iconSize: 14
 }

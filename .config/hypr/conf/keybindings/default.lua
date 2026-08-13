@@ -96,7 +96,7 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "B", hl.dsp.exec_cmd("qs ipc call
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "R", hl.dsp.exec_cmd("~/.config/hypr/scripts/loadconfig.sh"), { description = "Reload hyprland config" })
 
-hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("~/.config/ml4w/scripts/cliphist.sh"), { description = "Open clipboard manager" })
+hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("qs ipc call clipboard toggle"), { description = "Open clipboard manager" })
 
 -- Dropped with waybar: the theme switcher picked one of the ml4w theme/variation
 -- pairs under ~/.config/waybar/themes. The Quickshell bar has one look, defined

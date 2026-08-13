@@ -21,8 +21,10 @@ Drawer {
     IconButton {
         icon: Icons.clipboard
 
-        onClicked: Quickshell.execDetached([`${root.scripts}/ml4w/scripts/cliphist.sh`])
-        onRightClicked: Quickshell.execDetached([`${root.scripts}/ml4w/scripts/cliphist.sh`, "d"])
+        // Deleting and clearing are keys inside the picker now, so this no
+        // longer needs the old script's separate right-click "delete mode" --
+        // which reopened the same list with a different verb attached.
+        onClicked: Clipboard.toggle()
     }
 
     IconButton {

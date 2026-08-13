@@ -52,4 +52,6 @@ Singleton {
     readonly property string pause: "\uf04c"
     // Launcher
     readonly property string search: "\uf002"
+    // Clipboard
+    readonly property string image: "\uf1c5"
 }
