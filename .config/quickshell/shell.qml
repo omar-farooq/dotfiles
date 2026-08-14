@@ -23,6 +23,7 @@ import "root:/notifications"
 import "root:/launcher"
 import "root:/clipboard"
 import "root:/keybinds"
+import "root:/wallpaper"
 import "root:/services"
 
 ShellRoot {
@@ -75,6 +76,8 @@ ShellRoot {
 
     KeybindsWindow {}
 
+    EffectsWindow {}
+
     IpcHandler {
         target: "launcher"
 
@@ -108,6 +111,22 @@ ShellRoot {
 
         function close(): void {
             Keybinds.hide();
+        }
+    }
+
+    IpcHandler {
+        target: "effects"
+
+        function toggle(): void {
+            WallpaperEffects.toggle();
+        }
+
+        function close(): void {
+            WallpaperEffects.hide();
+        }
+
+        function choose(name: string): void {
+            WallpaperEffects.apply(name);
         }
     }
 

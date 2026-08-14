@@ -107,6 +107,12 @@ hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("waypaper"),
 
 hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper-automation.sh"), { description = "Start random wallpaper script" })
 
+-- The bare modifier, because W is the wallpaper family and the other three are
+-- taken. The effect picker is also on the wallpaper button's right-click, but
+-- that is a right-click on a button inside a hover drawer, which is no way to
+-- find a thing you did not already know was there.
+hl.bind(mainMod .. " + " .. "W", hl.dsp.exec_cmd("qs ipc call effects toggle"), { description = "Open wallpaper effect picker" })
+
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "RETURN", hl.dsp.exec_cmd("qs ipc call launcher toggle"), { description = "Open application launcher" })
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "H", hl.dsp.exec_cmd("qs ipc call keybinds toggle"), { description = "Show keybindings" })

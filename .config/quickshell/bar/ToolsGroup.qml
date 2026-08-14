@@ -49,6 +49,9 @@ Drawer {
         icon: Icons.wallpaper
 
         onClicked: Quickshell.execDetached(["waypaper"])
-        onRightClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/wallpaper-effects.sh`])
+
+        // Was wallpaper-effects.sh, which was rofi's last caller anywhere on
+        // the machine. Now the same list in the shell's own picker.
+        onRightClicked: WallpaperEffects.toggle()
     }
 }

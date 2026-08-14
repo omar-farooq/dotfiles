@@ -54,4 +54,8 @@ Singleton {
     readonly property string search: "\uf002"
     // Clipboard
     readonly property string image: "\uf1c5"
+
+    // Wallpaper effects. A tick beside the effect currently in force,
+    // which the old rofi list had no way to show.
+    readonly property string check: "\uf00c"
 }
