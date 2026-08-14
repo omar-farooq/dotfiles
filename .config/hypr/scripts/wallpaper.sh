@@ -27,7 +27,12 @@ fi
 
 force_generate=0
 generated_versions="$HOME/.config/ml4w/cache/wallpaper-generated"
-cache_file="$HOME/.config/ml4w/cache/current_wallpaper"
+# Not under cache/: this is the one genuinely stateful thing the wallpaper
+# pipeline keeps -- which image is currently set -- and everything else in
+# cache/ is regenerable output that is now untracked and wiped freely. waypaper
+# passes the path in as $1 when it drives this, so this file only gets consulted
+# on the argument-less runs: `init`, and a wallpaper-effect change.
+cache_file="$HOME/.config/ml4w/settings/current-wallpaper"
 blurred_wallpaper="$HOME/.config/ml4w/cache/blurred_wallpaper.png"
 square_wallpaper="$HOME/.config/ml4w/cache/square_wallpaper.png"
 rasi_file="$HOME/.config/ml4w/cache/current_wallpaper.rasi"
