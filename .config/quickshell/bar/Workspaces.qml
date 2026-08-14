@@ -59,10 +59,27 @@ Pill {
     // U+F2D0 window-maximize, for anything not matched above.
     readonly property string defaultWindowIcon: "\uf2d0"
 
+    // The class comes off the Wayland handle, not off lastIpcObject.
+    //
+    // HyprlandToplevel.lastIpcObject is only filled in by a full `hyprctl
+    // clients` query, and Quickshell runs one of those just once, at startup.
+    // A window opened later is built from the `openwindow` event and keeps an
+    // *empty* map for the rest of its life -- measured: zero keys, no `class`
+    // in it at all. So within minutes of logging in every window was unmatched
+    // and the row decayed into a line of identical U+F2D0 fallback glyphs.
+    //
+    // `wayland.appId` is pushed by the compositor as the toplevel appears, so
+    // it is right immediately and stays right. It carries the same string
+    // Hyprland reports as `class`, so the rewrite table above still applies
+    // unchanged. lastIpcObject stays on as a fallback for any toplevel that
+    // somehow arrives without a wl handle.
+    function classOf(t) {
+        return (t.wayland && t.wayland.appId) || (t.lastIpcObject ? t.lastIpcObject["class"] : "") || "";
+    }
+
     function iconsFor(ws) {
         return ws.toplevels.values.map(t => {
-            const cls = t.lastIpcObject ? t.lastIpcObject["class"] : "";
-            const icon = root.windowIcons[cls];
+            const icon = root.windowIcons[root.classOf(t)];
             return icon === undefined ? root.defaultWindowIcon : icon;
         }).filter(icon => icon !== "").join(" ");
     }

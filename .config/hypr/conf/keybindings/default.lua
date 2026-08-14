@@ -127,7 +127,9 @@ hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("qs ipc call clipboard toggle")
 -- in theme/Theme.qml, and takes its colours from pywal like everything else --
 -- so changing the wallpaper is the theme switcher now.
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"), { description = "Open ML4W Dotfiles Settings app" })
+-- SUPER+CTRL+S is free: it opened the ML4W Dotfiles Settings AppImage, which
+-- has been deleted along with the rest of ml4w. It wrote to config files this
+-- repo now owns outright, so there is nothing left for it to configure.
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/hyprshade.sh"), { description = "Toggle screenshader" })
 
@@ -238,18 +240,24 @@ hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("pactl set-sink-volume @DEFAULT_
 
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { description = "Toggle mute" })
 
--- Bare `playerctl` acts on whichever player it happens to pick first, so with a
--- YouTube tab open the media keys would control the browser instead of Spotify.
--- "spotify,%any" makes Spotify the preferred target and falls back to any other
--- player when Spotify is not running, so the keys never become dead.
+-- These used to be `playerctl --player=spotify,%any`, which was a second
+-- implementation of a rule the bar already had: prefer Spotify, but fall back
+-- to any other player when it is not running, so the keys never go dead. The
+-- shell speaks MPRIS itself for the media pill, so the keys now call into it
+-- and the two share one answer to "which player?" -- see the Media service in
+-- ~/.config/quickshell/services/Media.qml. That retired playerctl, which was
+-- installed for these four lines and nothing else.
+--
+-- The cost is that these keys need the shell running, which the launcher,
+-- clipboard picker and bar already did.
 
-hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl --player=spotify,%any play-pause"), { description = "Audio play pause (prefers Spotify)" })
+hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("qs ipc call media playpause"), { description = "Audio play pause (prefers Spotify)" })
 
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl --player=spotify,%any pause"), { description = "Audio pause (prefers Spotify)" })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("qs ipc call media pause"), { description = "Audio pause (prefers Spotify)" })
 
-hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl --player=spotify,%any next"), { description = "Audio next (prefers Spotify)" })
+hl.bind("XF86AudioNext", hl.dsp.exec_cmd("qs ipc call media next"), { description = "Audio next (prefers Spotify)" })
 
-hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl --player=spotify,%any previous"), { description = "Audio previous (prefers Spotify)" })
+hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("qs ipc call media previous"), { description = "Audio previous (prefers Spotify)" })
 
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { description = "Toggle microphone" })
 
@@ -257,4 +265,4 @@ hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh
 
 hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("hyprlock"), { description = "Open screenlock" })
 
-hl.bind("XF86Tools", hl.dsp.exec_cmd("alacritty --class dotfiles-floating -e ~/.config/ml4w/apps/ML4W_Dotfiles_Settings-x86_64.AppImage"), { description = "Open ML4W Dotfiles Settings app" })
+-- XF86Tools is free: same deleted ML4W Settings AppImage as SUPER+CTRL+S above.

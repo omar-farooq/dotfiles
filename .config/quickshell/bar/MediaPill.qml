@@ -8,26 +8,23 @@
 //
 // Controls match the old module exactly: click toggles play/pause, wheel up is
 // next, wheel down is previous.
+//
+// Player selection and the transport actions live in the Media service, not
+// here, because the XF86Audio* keybinds call the same functions over IPC. The
+// pill is just the visible end of it.
 
 import QtQuick
 import Quickshell
-import Quickshell.Services.Mpris
 import "root:/theme"
 import "root:/components"
+import "root:/services"
 
 Pill {
     id: root
 
-    // Spotify only, which is what waybar's `--player spotify` meant. Widening
-    // this to "whatever is playing" is a one-line change -- but it also means
-    // every YouTube tab and every video in a browser takes over the pill, which
-    // is presumably why it was pinned to one player to begin with.
-    readonly property string preferred: "spotify"
-
-    readonly property var player: {
-        const match = p => `${p.dbusName || ""} ${p.identity || ""}`.toLowerCase().includes(root.preferred);
-        return Mpris.players.values.find(match) || null;
-    }
+    // Spotify only -- see Media.preferred for why the pill is pinned to one
+    // player while the keys are allowed to fall back to any.
+    readonly property var player: Media.preferred
 
     // No player, no pill -- Spotify not running should leave no trace on the
     // bar, the way an empty window title does.
@@ -42,24 +39,16 @@ Pill {
         return title && artist ? `${artist} — ${title}` : (title || artist || "Spotify");
     }
 
-    onClicked: if (root.player && root.player.canTogglePlaying)
-        root.player.togglePlaying()
+    // Straight through to the service, which is also what the media keys hit.
+    // The pill only exists when Spotify is running, and Media.active prefers
+    // Spotify whenever it is running, so these always land on the player named
+    // in the label -- there is no case where the pill drives something else.
+    onClicked: Media.playpause()
 
     // Bring the player to the front. waybar had nothing on right click here.
-    onRightClicked: if (root.player && root.player.canRaise)
-        root.player.raise()
+    onRightClicked: Media.raise()
 
-    onWheel: delta => {
-        if (!root.player)
-            return;
-
-        if (delta > 0) {
-            if (root.player.canGoNext)
-                root.player.next();
-        } else if (root.player.canGoPrevious) {
-            root.player.previous();
-        }
-    }
+    onWheel: delta => delta > 0 ? Media.next() : Media.previous()
 
     BarIcon {
         text: Icons.spotify

@@ -110,4 +110,27 @@ ShellRoot {
             Keybinds.hide();
         }
     }
+
+    // The XF86Audio transport keys, which used to be four playerctl calls. See
+    // services/Media.qml -- the point of routing them here is that the keys and
+    // the bar pill now share one answer to "which player?".
+    IpcHandler {
+        target: "media"
+
+        function playpause(): void {
+            Media.playpause();
+        }
+
+        function pause(): void {
+            Media.pause();
+        }
+
+        function next(): void {
+            Media.next();
+        }
+
+        function previous(): void {
+            Media.previous();
+        }
+    }
 }
