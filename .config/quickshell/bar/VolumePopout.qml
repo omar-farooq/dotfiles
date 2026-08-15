@@ -203,7 +203,10 @@ Popout {
                         anchors.rightMargin: 8
                         anchors.top: parent.top
                         height: root.rowHeight
-                        text: Audio.label(stream.modelData)
+                        // The tab or track title, not the application: two
+                        // Firefox windows are both "Firefox" and there would be
+                        // no telling which slider was which.
+                        text: Audio.streamLabel(stream.modelData)
                         elide: Text.ElideRight
                     }
 
