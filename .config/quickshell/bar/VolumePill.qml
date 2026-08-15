@@ -2,58 +2,39 @@
 //
 // waybar went through its pulseaudio module, which talks to PipeWire's Pulse
 // shim; this talks to PipeWire itself, so the volume it shows is the one the
-// server actually holds.
+// server actually holds. The readings now come via services/Audio.qml, so the
+// pill and the mixer below it cannot disagree about which sink is "the" sink.
 
 import QtQuick
 import Quickshell
-import Quickshell.Services.Pipewire
 import "root:/theme"
 import "root:/components"
+import "root:/services"
 
 Pill {
     id: root
 
-    readonly property var sink: Pipewire.defaultAudioSink
-    readonly property var audio: sink ? sink.audio : null
-    readonly property int volume: audio ? Math.round(audio.volume * 100) : 0
-    readonly property bool muted: audio ? audio.muted : false
+    onClicked: mixer.open = !mixer.open
+    onRightClicked: Audio.toggleMute(Audio.sink)
 
-    readonly property string icon: {
-        if (root.muted)
-            return Icons.volumeMuted;
-
-        // Thirds, matching waybar's three-icon default array.
-        const levels = Icons.volumeLevels;
-        const index = Math.min(levels.length - 1, Math.floor(root.volume / (100 / levels.length)));
-        return levels[Math.max(0, index)];
-    }
-
-    onClicked: Quickshell.execDetached(["pavucontrol"])
-    onRightClicked: if (root.audio)
-        root.audio.muted = !root.audio.muted
-
-    // PipeWire objects are lazily bound -- without a tracker holding the sink,
-    // its volume and mute properties never update and the pill freezes at
-    // whatever it read first.
-    PwObjectTracker {
-        objects: root.sink ? [root.sink] : []
-    }
+    // pavucontrol, which used to be the left click, kept as an escape hatch for
+    // the routing and per-device settings the mixer does not try to cover.
+    onMiddleClicked: Quickshell.execDetached(["pavucontrol"])
 
     BarIcon {
-        text: root.icon
+        text: Icons.forVolume(Audio.volume, Audio.muted)
     }
 
     BarText {
-        text: root.muted ? "muted" : `${root.volume}%`
+        text: Audio.muted ? "muted" : `${Audio.volume}%`
     }
 
-    // Scroll to adjust -- new; waybar had scroll-step commented out. Capped at
-    // 1.0 rather than letting PipeWire's software boost past 100%, which is an
-    // easy way to distort the output by leaning on the wheel.
-    onWheel: delta => {
-        if (!root.audio)
-            return;
+    // Scroll to adjust -- new; waybar had scroll-step commented out.
+    onWheel: delta => Audio.setVolume(Audio.sink, (Audio.audio ? Audio.audio.volume : 0) + (delta > 0 ? 0.02 : -0.02))
 
-        root.audio.volume = Math.max(0, Math.min(1, root.audio.volume + (delta > 0 ? 0.02 : -0.02)));
+    VolumePopout {
+        id: mixer
+
+        anchorItem: root
     }
 }

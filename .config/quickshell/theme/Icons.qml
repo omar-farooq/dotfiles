@@ -45,6 +45,18 @@ Singleton {
     readonly property string headset: "\uf590"
     readonly property string phone: "\uf095"
     readonly property string car: "\uf1b9"
+
+    // Which of the three to draw for a given level. Lives here rather than in
+    // the volume pill because the mixer's rows pick their icons the same way,
+    // and two copies of the rule would eventually disagree.
+    function forVolume(volume, muted) {
+        if (muted)
+            return volumeMuted;
+
+        const index = Math.min(volumeLevels.length - 1, Math.floor(volume / (100 / volumeLevels.length)));
+        return volumeLevels[Math.max(0, index)];
+    }
+
     // Media. The Spotify mark is the same codepoint the workspace pills use for
     // a Spotify window, which is deliberate -- one app, one glyph.
     readonly property string spotify: "\uf1bc"

@@ -86,15 +86,10 @@ Popout {
         root.viewMonth = root.today.getMonth();
     }
 
-    // Text in the panel's voice. The bar's BarText is not it: that one is pinned
-    // to the pill height so it centres itself inside a bar Row, which in a grid
-    // of 30px cells would make every number overflow its own cell.
-    component PanelText: Text {
-        color: Theme.text
-        font.family: Theme.textFont
-        font.pixelSize: Theme.fontSize
+    // Centred variant of the shared panel text -- everything in a calendar is
+    // centred in its own cell, and nothing else in a popout is.
+    component CellText: PanelText {
         horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 
     SystemClock {
@@ -124,7 +119,7 @@ Popout {
                 onClicked: root.page(-1)
             }
 
-            PanelText {
+            CellText {
                 id: monthLabel
 
                 anchors.centerIn: parent
@@ -154,7 +149,7 @@ Popout {
             Repeater {
                 model: 7
 
-                PanelText {
+                CellText {
                     required property int index
 
                     width: root.cellWidth
@@ -197,7 +192,7 @@ Popout {
                             visible: cell.modelData.isToday
                         }
 
-                        PanelText {
+                        CellText {
                             anchors.fill: parent
                             text: cell.modelData.day
                             // The spill-over days are context, not content.
@@ -226,7 +221,7 @@ Popout {
 
         // The long form of today's date. The pill can only ever show one of the
         // time and the date, so this is where the year lives.
-        PanelText {
+        CellText {
             width: root.gridWidth
             text: Qt.formatDate(root.today, "dddd d MMMM yyyy")
             font.pixelSize: Theme.fontSize - 1
