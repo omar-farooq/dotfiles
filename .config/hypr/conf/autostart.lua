@@ -4,68 +4,23 @@
 
 ---@module 'hl'
 
--- ----------------------------------------------------- 
-
+-- -----------------------------------------------------
 -- Autostart
-
--- ----------------------------------------------------- 
-
--- Setup XDG for screen sharing
-
---exec-once = ~/.config/hypr/scripts/xdg.sh
-
--- Start Polkit
-
--- Test Polkit pkexec --user username alacritty
-
-
--- Load Dunst Notification Manager
-
-
--- Load GTK settings
-
-
--- Using hypridle to start the lock screen (Quickshell's, since 2026-08-15)
-
-
--- Load cliphist history
-
-
--- Autostart ML4W App
-
-
--- Start ewww daemon
-
-
--- Initialize waypaper
-
--- exec-once = waypaper --restore
-
-
--- Launch Waybar
-
-
--- Start autostart cleanup
-
-
--- Load configuration from ML4W Hyprland Settings App
-
-
--- reload plugins
-
-
--- autostart cava
-
-
--- Autostart
+--
+-- What used to sit between here and the block below was a column of
+-- hyprconf2lua's conversion labels -- "Load Dunst Notification Manager",
+-- "Start ewww daemon", "Launch Waybar" and a dozen more, each naming a thing
+-- with no code under it. Every one of those programs has since been replaced or
+-- removed, so the labels had stopped even describing the past accurately.
+-- -----------------------------------------------------
 hl.on("hyprland.start", function()
     hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
     -- No notification daemon here any more: Quickshell owns
     -- org.freedesktop.Notifications itself (see quickshell/services/
-    -- Notifications.qml). Only one process can hold that name, so starting
-    -- dunst as well would mean whichever won the race got the notifications.
-    -- dunst is still installed; drop `qs -d -n` below and put this back to
-    -- return to it.
+    -- Notifications.qml). Only one process can hold that name, so starting a
+    -- second one would mean whichever won the race got the notifications.
+    -- dunst has since been uninstalled and its config deleted, so this is no
+    -- longer a line you can simply put back.
     hl.exec_cmd("~/.config/hypr/scripts/gtk.sh")
     hl.exec_cmd("hypridle")
     hl.exec_cmd("wl-paste --watch cliphist store")
@@ -73,7 +28,6 @@ hl.on("hyprland.start", function()
     -- and it referenced the postinstall script we removed), and `ags &` -- that
     -- config was ML4W's v1 sidebar, which the installed v3 (Astal) could not
     -- read; both the config and the whole AGS/Astal package stack are now gone.
-    -- Waybar is the bar in use.
     hl.exec_cmd("hyprpaper")
     -- The bar. Quickshell replaced waybar and the ml4w theme machinery around
     -- it: no launch script, because there is no theme/variation pair to resolve

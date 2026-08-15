@@ -29,9 +29,10 @@ force_generate=0
 generated_versions="$HOME/.config/ml4w/cache/wallpaper-generated"
 # Not under cache/: this is the one genuinely stateful thing the wallpaper
 # pipeline keeps -- which image is currently set -- and everything else in
-# cache/ is regenerable output that is now untracked and wiped freely. waypaper
-# passes the path in as $1 when it drives this, so this file only gets consulted
-# on the argument-less runs: `init`, and a wallpaper-effect change.
+# cache/ is regenerable output that is now untracked and wiped freely. The
+# shell passes the chosen path in as $1 (services/Wallpaper.qml, which took this
+# over from waypaper), so this file only gets consulted on the argument-less
+# runs: `init`, and a wallpaper-effect change.
 cache_file="$HOME/.config/ml4w/settings/current-wallpaper"
 # Both of these are read by hyprlock.conf -- the blurred one as its background,
 # the square one as the profile picture. hyprlock is not in use (the lock screen

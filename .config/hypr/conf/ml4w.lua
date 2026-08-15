@@ -43,18 +43,9 @@ hl.window_rule({
     move = { "(20)", "(70)" },
 })
 
--- ML4W Welcome App floating
-
-hl.window_rule({
-    name  = "windowrule-4",
-    match = {
-        class = "(.*waypaper.*)",
-    },
-    float = true,
-    size = { 800, 700 },
-    center = true,
-    pin = true,
-})
+-- Dropped: a float/centre/pin rule for waypaper's window. The wallpaper chooser
+-- is a Quickshell layer surface now, so there is no toplevel for a window rule
+-- to match, and the package is uninstalled.
 
 -- ML4W Welcome App floating
 

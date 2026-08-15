@@ -33,8 +33,9 @@ _folderExists() {
     fi
 }
 
-# rofi and dunst are deliberately absent -- Quickshell absorbed everything
-# they did (pickers, notifications), so do not check for them here.
+# rofi, dunst and waypaper are deliberately absent -- Quickshell absorbed
+# everything they did (pickers, notifications, the wallpaper chooser), so do not
+# check for them here.
 _commandExists "notify-send" "libnotify"
 _commandExists "qs" "quickshell"
 _commandExists "hyprpaper" "hyprpaper"
@@ -48,7 +49,6 @@ _commandExists "wal" "python-pywal"
 _commandExists "gum" "gum"
 _commandExists "magick" "imagemagick"
 _commandExists "figlet" "figlet"
-_commandExists "waypaper" "waypaper"
 
 echo
 echo "Press return to exit"
