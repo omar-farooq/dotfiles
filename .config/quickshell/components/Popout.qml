@@ -14,7 +14,6 @@
 
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
 import "root:/theme"
 
 PopupWindow {
@@ -35,11 +34,6 @@ PopupWindow {
     // Space between the panel's edge and the content.
     property int padding: 14
 
-    // The window the anchor pill lives in -- the bar. Needed for the focus grab
-    // below, and reached through the attached property rather than by walking
-    // `parent` up, which stops at the window's content item.
-    readonly property QtObject hostWindow: anchorItem ? anchorItem.QsWindow.window : null
-
     visible: root.open && root.anchorItem !== null
 
     // Hangs from the pill's bottom-right corner and grows down and to the left,
@@ -52,49 +46,65 @@ PopupWindow {
     anchor.gravity: Edges.Bottom | Edges.Left
     anchor.adjustment: PopupAdjustment.SlideX
 
-    // The window is a gap taller than the panel, and the panel sits at the
-    // bottom of it, so the gap between pill and panel is empty window rather
-    // than a positioning offset. `anchor.margins` looks like the obvious way to
-    // ask for that gap and is not: its margins inset the anchor rectangle, so a
-    // bottom margin pulls the panel *up* over the pill. The mask below is what
-    // stops the empty strip swallowing clicks meant for the bar behind it.
+    // The gap between pill and panel is built into the anchor rectangle: the
+    // rect handed to the compositor is the pill's, extended a gap below it, so
+    // the panel lands a gap lower without the window itself being any bigger.
+    // `anchor.margins` looks like the way to ask for that and is the opposite
+    // of it -- those margins *inset* this rect, so a bottom margin pulls the
+    // panel up over the pill. Doing it with a taller window and an empty strip
+    // at the top does work, but only with a `mask` to keep the strip from
+    // swallowing clicks, and a mask is an input region: get it slightly wrong
+    // and the whole panel silently stops taking input.
+    anchor.rect.x: 0
+    anchor.rect.y: 0
+    anchor.rect.width: root.anchorItem ? root.anchorItem.width : 0
+    anchor.rect.height: (root.anchorItem ? root.anchorItem.height : 0) + Theme.gap
+
     implicitWidth: Math.max(1, Math.round(body.childrenRect.width)) + padding * 2
-    implicitHeight: Math.max(1, Math.round(body.childrenRect.height)) + padding * 2 + Theme.gap
+    implicitHeight: Math.max(1, Math.round(body.childrenRect.height)) + padding * 2
 
     color: "transparent"
-    mask: Region {
-        item: panel
-    }
+
+    // Dismissal is the pill's job: clicking it again closes the popout. There
+    // is deliberately no click-outside-to-dismiss, because neither mechanism
+    // for it survives a layer-shell parent that does not take keyboard focus,
+    // and both fail in ways that look like something else:
+    //
+    //   - `HyprlandFocusGrab` listing the popup *and* the bar delivers hover to
+    //     the panel but silently swallows every button press. The panel looks
+    //     alive, highlights under the pointer, and ignores clicks -- which
+    //     reads as a dead button, not as a grab problem. This cost an evening.
+    //   - Listing only the popup stops eating clicks, but then the grab never
+    //     establishes: `cleared` fires immediately, so the panel closes in the
+    //     same frame it opens.
+    //   - `grabFocus` does not map the popup at all.
+    //
+    // Getting it back means making the bar `WlrKeyboardFocus.OnDemand`, which
+    // hands the bar the keyboard every time a pill is clicked. That is a worse
+    // trade than clicking the pill twice.
 
     data: [
-        // Clicking anywhere outside the popout closes it. The bar is in the
-        // grab alongside the panel so that clicking the pill a second time
-        // still reaches the pill: without it the grab would eat that click to
-        // dismiss itself and the pill's own toggle would reopen the popout in
-        // the same gesture. The cost is that clicking a *different* pill leaves
-        // this one open.
-        HyprlandFocusGrab {
-            windows: root.hostWindow ? [root, root.hostWindow] : [root]
-            active: root.visible
-
-            onCleared: root.open = false
-        },
         Rectangle {
             id: panel
 
             anchors.fill: parent
-            anchors.topMargin: Theme.gap
 
             radius: Theme.panelRadius
             color: Theme.panel
             border.width: 1
             border.color: Theme.panelBorder
 
+            // Sized to what it holds rather than left at zero. Qt only culls a
+            // subtree from hit-testing when the parent clips, so a zero-sized
+            // slot would still have worked -- but every readout of this item's
+            // geometry, this window's size included, would have been a lie.
             Item {
                 id: body
 
                 x: root.padding
                 y: root.padding
+                width: childrenRect.width
+                height: childrenRect.height
             }
         }
     ]
