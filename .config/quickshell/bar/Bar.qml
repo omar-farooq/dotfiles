@@ -34,9 +34,15 @@ PanelWindow {
 
     implicitHeight: Theme.barHeight
 
-    // Reserve the bar's height *and* the gap above it, so a maximised window
-    // stops below the bar rather than sliding under it.
-    exclusiveZone: Theme.barHeight + Theme.barMarginTop
+    // Reserve the bar's height, and only that.
+    //
+    // The margin above it does not belong here even though it looks like it
+    // should: the compositor adds a layer surface's own margin to whatever
+    // exclusive zone it asks for. Reserving `barHeight + barMarginTop` counted
+    // that gap twice -- `hyprctl monitors` reported 50 reserved for a bar whose
+    // bottom edge is at 42 -- and every window on every monitor sat 8px lower
+    // than it needed to, which read as the bar floating oddly far above them.
+    exclusiveZone: Theme.barHeight
 
     // The bar's own empty space dismisses an open popout, the same as anywhere
     // else on screen would. PopoutCatcher deliberately cuts the whole bar strip

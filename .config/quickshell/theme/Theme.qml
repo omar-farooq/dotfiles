@@ -85,7 +85,12 @@ Singleton {
     // Metrics
     // -----------------------------------------------------------------
 
-    readonly property int barHeight: 34
+    // Four pixels taller than the pills it holds, so there is a hair of slack
+    // above and below them and no more. It was 34, which put twice that much
+    // dead space under the pills and made the bar look like it was floating too
+    // far above the windows -- most of which was the exclusive-zone bug fixed in
+    // Bar.qml, but this was the rest of it.
+    readonly property int barHeight: 30
     readonly property int barMarginTop: 8
     readonly property int barMarginSide: 12
 
