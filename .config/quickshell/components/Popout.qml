@@ -47,6 +47,16 @@ PopupWindow {
     // Space between the panel's edge and the content.
     property int padding: 14
 
+    // Mapped exactly while open, and nothing cleverer than that.
+    //
+    // A QML fade was tried here and removed: making `visible` depend on an
+    // animating opacity (`root.open || panel.opacity > 0`) means a reload that
+    // tears the window down mid-animation leaves it mapped forever, because the
+    // animation that would have carried opacity to zero dies with the old
+    // generation. Three stranded panels sat on screen at once before that was
+    // understood. Hyprland already fades a closing popup surface -- it is why a
+    // screenshot taken just after a swap catches a ghost of the old panel -- so
+    // the fade was buying a bug to get something the compositor gives free.
     visible: root.open && root.anchorItem !== null
 
     // Which of the pill's vertical edges the panel lines up with, and therefore

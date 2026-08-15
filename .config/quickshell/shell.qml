@@ -19,6 +19,7 @@
 import Quickshell
 import Quickshell.Io
 import "root:/bar"
+import "root:/components"
 import "root:/notifications"
 import "root:/launcher"
 import "root:/clipboard"
@@ -63,6 +64,15 @@ ShellRoot {
         Bar {
             visible: root.barVisible
         }
+    }
+
+    // Also one per monitor: a click on any screen should dismiss a popout open
+    // on any other, so each output needs its own catcher. See PopoutCatcher --
+    // it only exists while something is open.
+    Variants {
+        model: Quickshell.screens
+
+        PopoutCatcher {}
     }
 
     // Not per-screen: notifications land on one fixed output, the way dunst was

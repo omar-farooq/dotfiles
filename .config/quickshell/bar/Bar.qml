@@ -3,6 +3,7 @@
 import QtQuick
 import Quickshell
 import "root:/theme"
+import "root:/services"
 
 PanelWindow {
     id: bar
@@ -36,6 +37,18 @@ PanelWindow {
     // Reserve the bar's height *and* the gap above it, so a maximised window
     // stops below the bar rather than sliding under it.
     exclusiveZone: Theme.barHeight + Theme.barMarginTop
+
+    // The bar's own empty space dismisses an open popout, the same as anywhere
+    // else on screen would. PopoutCatcher deliberately cuts the whole bar strip
+    // out of its input region so that pills keep working -- clicking another
+    // pill should swap panels rather than costing a click to dismiss and
+    // another to open -- and this fills the gaps that leaves. Declared before
+    // the rows so it sits underneath them and never takes a pill's click.
+    MouseArea {
+        anchors.fill: parent
+
+        onPressed: Popouts.closeAll()
+    }
 
     // Three separately anchored rows rather than one three-cell layout. The
     // centre group then stays centred on the screen however wide the window

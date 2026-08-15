@@ -41,4 +41,10 @@ Singleton {
         if (root.current === popout)
             root.current = null;
     }
+
+    // Whatever is open, closed. For the click-catcher, which does not know or
+    // care which panel it is dismissing.
+    function closeAll() {
+        root.current = null;
+    }
 }
