@@ -15,6 +15,7 @@
 import QtQuick
 import Quickshell
 import "root:/theme"
+import "root:/services"
 
 PopupWindow {
     id: root
@@ -29,7 +30,19 @@ PopupWindow {
     // which is what keeps the two on the same monitor.
     property Item anchorItem: null
 
-    property bool open: false
+    // Open when Popouts says this is the one that is. Read-only deliberately:
+    // an ordinary settable flag is exactly what allowed two panels on screen at
+    // once, because setting one says nothing about the other. Ask through the
+    // two functions below and the answer stays a single fact.
+    readonly property bool open: Popouts.current === root
+
+    function toggle() {
+        Popouts.toggle(root);
+    }
+
+    function close() {
+        Popouts.close(root);
+    }
 
     // Space between the panel's edge and the content.
     property int padding: 14
@@ -65,8 +78,9 @@ PopupWindow {
 
     color: "transparent"
 
-    // Dismissal is the pill's job: clicking it again closes the popout. There
-    // is deliberately no click-outside-to-dismiss, because neither mechanism
+    // Dismissal is the pill's job: clicking it again closes the popout, and
+    // opening any other one closes this (see Popouts). There is deliberately no
+    // click-outside-to-dismiss, because neither mechanism
     // for it survives a layer-shell parent that does not take keyboard focus,
     // and both fail in ways that look like something else:
     //

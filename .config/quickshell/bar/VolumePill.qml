@@ -14,7 +14,7 @@ import "root:/services"
 Pill {
     id: root
 
-    onClicked: mixer.open = !mixer.open
+    onClicked: mixer.toggle()
     onRightClicked: Audio.toggleMute(Audio.sink)
 
     // pavucontrol, which used to be the left click, kept as an escape hatch for

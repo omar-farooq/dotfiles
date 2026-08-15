@@ -19,7 +19,7 @@ Pill {
 
     accent: Theme.surfaceStrong
 
-    onClicked: calendar.open = !calendar.open
+    onClicked: calendar.toggle()
     onRightClicked: root.showDate = !root.showDate
 
     // Minute precision. The bar shows no seconds, so waking once a second to
