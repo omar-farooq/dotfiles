@@ -91,7 +91,13 @@ Singleton {
     // far above the windows -- most of which was the exclusive-zone bug fixed in
     // Bar.qml, but this was the rest of it.
     readonly property int barHeight: 30
-    readonly property int barMarginTop: 8
+    // Ten rather than eight to compensate for barHeight dropping 34 -> 30. The
+    // pills are centred in the bar surface, and the surface is transparent, so
+    // shortening it alone moved the only visible thing -- the pill row -- up two
+    // pixels. Two back here lands the pills at exactly the y they sat at when
+    // the bar was 34 tall, while the shorter surface still gives back the dead
+    // space underneath them.
+    readonly property int barMarginTop: 10
     readonly property int barMarginSide: 12
 
     readonly property int pillHeight: 26
