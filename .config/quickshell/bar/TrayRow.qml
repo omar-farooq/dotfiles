@@ -1,21 +1,41 @@
 // System tray (StatusNotifierItem).
+//
+// Minus anything the bar already shows somewhere better. Spotify registers a
+// tray icon, and SpotifyPill is a richer version of exactly the same thing --
+// same application, same controls, with album art and a seek bar besides -- so
+// carrying both put one app at each end of the bar.
 
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
 import Quickshell.Widgets
 import "root:/theme"
+import "root:/services"
 
 Row {
     id: root
 
     spacing: Theme.gap
+
+    readonly property var shown: SystemTray.items.values.filter(item => !root.covered(item))
+
+    // Identified by Media rather than named again here, so the pill and this
+    // cannot drift apart about which application is covered -- and only while
+    // the pill is actually up. With no pill, the tray icon is the only Spotify
+    // on the bar, and hiding it then would remove the app from the bar
+    // altogether rather than de-duplicating it. The pill's panel carries this
+    // item's menu, so nothing that lived behind the icon is lost.
+    function covered(item) {
+        return Media.preferred !== null && item === Media.trayItem;
+    }
+
     // Row keeps its spacing even with nothing in it, which would leave a hole
-    // between the drawers and the power button on a session with no tray apps.
-    visible: SystemTray.items.values.length > 0
+    // between the drawers and the bell on a session with no tray apps -- or one
+    // whose only tray app is the covered one.
+    visible: root.shown.length > 0
 
     Repeater {
-        model: SystemTray.items
+        model: root.shown
 
         delegate: Item {
             id: entry

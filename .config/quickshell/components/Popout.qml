@@ -49,14 +49,24 @@ PopupWindow {
 
     visible: root.open && root.anchorItem !== null
 
-    // Hangs from the pill's bottom-right corner and grows down and to the left,
-    // so the panel lines up with the right-hand edge of its pill. Every pill
-    // that will want a popout sits in the bar's right-hand section, which is
-    // itself right-anchored, so this is the edge that stays still. SlideX lets
-    // a panel wider than the space left of its pill shuffle right to fit.
+    // Which of the pill's vertical edges the panel lines up with, and therefore
+    // which way it grows.
+    //
+    // Right by default, because the bar's right-hand section is right-anchored:
+    // a pill there keeps its right edge as neighbours change width, so a panel
+    // pinned to it never slides about. The left section is anchored the other
+    // way and the same reasoning inverts, so a pill over there (SpotifyPill) sets
+    // this and gets a panel that lines up with its left edge instead. Getting
+    // it wrong does not clip anything -- SlideX would shove the panel back on
+    // screen -- it just leaves the panel visibly beside its pill rather than
+    // under it.
+    property bool alignLeft: false
+
     anchor.item: root.anchorItem
-    anchor.edges: Edges.Bottom | Edges.Right
-    anchor.gravity: Edges.Bottom | Edges.Left
+    anchor.edges: Edges.Bottom | (root.alignLeft ? Edges.Left : Edges.Right)
+    anchor.gravity: Edges.Bottom | (root.alignLeft ? Edges.Right : Edges.Left)
+
+    // Lets a panel wider than the space beside its pill shuffle along to fit.
     anchor.adjustment: PopupAdjustment.SlideX
 
     // The gap between pill and panel is built into the anchor rectangle: the

@@ -6,8 +6,14 @@
 // process, its dependency on python-gobject and playerctl, and the JSON round
 // trip in between all go away.
 //
-// Controls match the old module exactly: click toggles play/pause, wheel up is
-// next, wheel down is previous.
+// Controls: left opens the player panel, right toggles play/pause, middle
+// raises the player, wheel up is next and wheel down is previous.
+//
+// The wheel is waybar's. The buttons are not: waybar's click-to-pause moved to
+// the right so that left-click could mean what it means on every other pill in
+// this bar -- open the panel. Consistency across the bar beat consistency with
+// the module this replaced, since the panel is now the thing you reach for
+// most and pause has a dedicated key on the keyboard anyway.
 //
 // Player selection and the transport actions live in the Media service, not
 // here, because the XF86Audio* keybinds call the same functions over IPC. The
@@ -15,6 +21,7 @@
 
 import QtQuick
 import Quickshell
+import Quickshell.Widgets
 import "root:/theme"
 import "root:/components"
 import "root:/services"
@@ -43,15 +50,49 @@ Pill {
     // The pill only exists when Spotify is running, and Media.active prefers
     // Spotify whenever it is running, so these always land on the player named
     // in the label -- there is no case where the pill drives something else.
-    onClicked: Media.playpause()
+    onClicked: player.toggle()
 
-    // Bring the player to the front. waybar had nothing on right click here.
-    onRightClicked: Media.raise()
+    onRightClicked: Media.playpause()
+
+    // Bring the player to the front. waybar had nothing on this one.
+    onMiddleClicked: Media.raise()
 
     onWheel: delta => delta > 0 ? Media.next() : Media.previous()
 
+    // Spotify's mark. This used to be the tray icon's job, and the tray row now
+    // filters that icon out -- without this the bar would carry album art and a
+    // track name with nothing saying which application they belong to.
     BarIcon {
         text: Icons.spotify
+        opacity: 0.8
+    }
+
+    // The album art beside it. MPRIS has been handing this over all along --
+    // waybar's module was a line of text and had nowhere to put a picture. It
+    // is a small square, but it is the cover you have been looking at in the
+    // player itself, so it names the track faster than reading the artist does.
+    //
+    // Absent entirely until the art has downloaded, and for a track that has
+    // none: the art is on Spotify's CDN rather than on disk, so there is always
+    // a moment before it arrives and an offline case where it never does. The
+    // glyph already identifies the app, so a placeholder square would add
+    // nothing but a flicker between tracks.
+    ClippingRectangle {
+        anchors.verticalCenter: parent.verticalCenter
+        width: 18
+        height: 18
+        radius: 4
+        color: "transparent"
+        visible: art.status === Image.Ready
+
+        Image {
+            id: art
+
+            anchors.fill: parent
+            source: root.player ? root.player.trackArtUrl : ""
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+        }
     }
 
     BarText {
@@ -73,5 +114,11 @@ Pill {
                 duration: Theme.animation
             }
         }
+    }
+
+    SpotifyPopout {
+        id: player
+
+        anchorItem: root
     }
 }

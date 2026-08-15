@@ -64,7 +64,21 @@ Singleton {
     }
 
     // Media. The Spotify mark is the same codepoint the workspace pills use for
-    // a Spotify window, which is deliberate -- one app, one glyph.
+    // a Spotify window, which is deliberate -- one app, one glyph. It is also
+    // the fallback when a track has no art, or has art that has not downloaded
+    // yet -- Spotify's art is a URL on their CDN rather than a local file.
+    //
+    // The transport glyphs are new: waybar's module was a line of text with a
+    // click binding, so it had nowhere to draw a button.
+    readonly property string stepBack: "\uf048"
+    readonly property string stepForward: "\uf051"
+    // The player's own menu, hosted on the media panel now that its tray icon
+    // is filtered out of the tray row.
+    readonly property string more: "\uf141"
+
+    readonly property string shuffle: "\uf074"
+    readonly property string repeat: "\uf363"
+
     readonly property string spotify: "\uf1bc"
     readonly property string play: "\uf04b"
     readonly property string pause: "\uf04c"

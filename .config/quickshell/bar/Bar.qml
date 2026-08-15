@@ -53,7 +53,7 @@ PanelWindow {
         AppMenu {}
 
         // Where waybar's quicklinks group sat, so the bar reads the same.
-        MediaPill {}
+        SpotifyPill {}
 
         WindowTitle {
             screen: bar.modelData
