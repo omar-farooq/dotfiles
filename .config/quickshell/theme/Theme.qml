@@ -72,6 +72,15 @@ Singleton {
     readonly property color danger: "#DC2F2F"
     readonly property color warning: "#FF9A3C"
 
+    // Panels -- the launcher, the clipboard picker, the clock's calendar. Not
+    // quite opaque, so the wallpaper still shows through the way the pills let
+    // it, but far more solid than a pill: these carry text you have to read.
+    // The border is white rather than palette-derived on purpose -- it is a
+    // highlight along the panel edge, not a colour of its own.
+    readonly property color panel: Qt.rgba(background.r, background.g, background.b, 0.96)
+    readonly property color panelBorder: Qt.rgba(1, 1, 1, 0.12)
+    readonly property int panelRadius: 14
+
     // -----------------------------------------------------------------
     // Metrics
     // -----------------------------------------------------------------

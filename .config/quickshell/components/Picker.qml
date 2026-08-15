@@ -101,11 +101,11 @@ PanelWindow {
 
         width: root.panelWidth
         height: Math.min(root.maxHeight, searchRow.height + list.contentHeight + (footerLabel.visible ? footerLabel.height + 6 : 0) + 30)
-        radius: 14
+        radius: Theme.panelRadius
 
-        color: Qt.rgba(Theme.background.r, Theme.background.g, Theme.background.b, 0.96)
+        color: Theme.panel
         border.width: 1
-        border.color: Qt.rgba(1, 1, 1, 0.12)
+        border.color: Theme.panelBorder
 
         // Swallows clicks so they do not reach the dismiss area behind.
         MouseArea {
