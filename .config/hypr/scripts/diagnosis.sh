@@ -33,12 +33,13 @@ _folderExists() {
     fi
 }
 
-_commandExists "rofi" "rofi-wayland"
+# rofi and dunst are deliberately absent -- Quickshell absorbed everything
+# they did (pickers, notifications), so do not check for them here.
 _commandExists "notify-send" "libnotify"
 _commandExists "qs" "quickshell"
 _commandExists "hyprpaper" "hyprpaper"
-_commandExists "hyprlock" "hyprpaper"
-_commandExists "hypridle" "hyprpaper"
+_commandExists "hyprlock" "hyprlock"
+_commandExists "hypridle" "hypridle"
 _commandExists "hyprshade" "hyprshade"
 _commandExists "wal" "python-pywal"
 _commandExists "gum" "gum"
