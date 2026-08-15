@@ -33,9 +33,14 @@ generated_versions="$HOME/.config/ml4w/cache/wallpaper-generated"
 # passes the path in as $1 when it drives this, so this file only gets consulted
 # on the argument-less runs: `init`, and a wallpaper-effect change.
 cache_file="$HOME/.config/ml4w/settings/current-wallpaper"
+# Both of these are read by hyprlock.conf -- the blurred one as its background,
+# the square one as the profile picture. hyprlock is not in use (the lock screen
+# is Quickshell's now) but it is deliberately kept installed as the way back in
+# if that ever wedges, so these two are still worth regenerating. There was a
+# third, current_wallpaper.rasi, which only rofi ever imported; it went when rofi
+# did.
 blurred_wallpaper="$HOME/.config/ml4w/cache/blurred_wallpaper.png"
 square_wallpaper="$HOME/.config/ml4w/cache/square_wallpaper.png"
-rasi_file="$HOME/.config/ml4w/cache/current_wallpaper.rasi"
 blur_file="$HOME/.config/ml4w/settings/blur.sh"
 default_wallpaper="$HOME/wallpaper/default.jpg"
 wallpaper_effect="$HOME/.config/ml4w/settings/wallpaper-effect.sh"
@@ -144,16 +149,7 @@ if [ ! "$blur" == "0x0" ] ;then
 fi
 cp $generated_versions/blur-$blur-$wallpaper_filename.png $blurred_wallpaper
 
-# ----------------------------------------------------- 
-# Create rasi file
-# ----------------------------------------------------- 
-
-if [ ! -f $rasi_file ] ;then
-    touch $rasi_file
-fi
-echo "* { current-image: url(\"$blurred_wallpaper\", height); }" > "$rasi_file"
-
-# ----------------------------------------------------- 
+# -----------------------------------------------------
 # Created square wallpaper
 # -----------------------------------------------------
 

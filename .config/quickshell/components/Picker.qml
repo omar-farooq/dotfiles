@@ -4,6 +4,10 @@
 // Both the app launcher and the clipboard picker are this with a different
 // model and a different delegate, which is why it lives here rather than being
 // written twice and then drifting apart.
+//
+// Set `columns` above 1 and the list becomes a grid instead -- same chrome,
+// same keys, same search. That exists for the wallpaper chooser, where the
+// thing being chosen is a picture and a row of filenames would be useless.
 
 import QtQuick
 import Quickshell
@@ -25,8 +29,22 @@ PanelWindow {
     property int panelWidth: 620
     property int maxHeight: 460
 
+    // One column is the list; more than one is a grid. The grid needs an
+    // explicit cell height, since a picture has no implicit one -- hosts bind
+    // it to `cellWidth`, which is why that is published.
+    property int columns: 1
+    property int cellHeight: 0
+
+    readonly property bool grid: root.columns > 1
+    readonly property real cellWidth: root.grid ? Math.floor(gridView.width / root.columns) : 0
+
+    // The view in use. Untyped on purpose: ListView and GridView share
+    // `currentIndex` and `contentHeight` but only through their own
+    // meta-objects, so a property declared as Flickable could not reach either.
+    readonly property var view: root.grid ? gridView : list
+
     readonly property alias query: input.text
-    readonly property alias selected: list.currentIndex
+    readonly property int selected: root.view ? root.view.currentIndex : 0
 
     // Called for keys the picker does not claim itself, before the text field
     // sees them. Return true to swallow the key. This is how the clipboard
@@ -66,14 +84,32 @@ PanelWindow {
     onVisibleChanged: {
         if (root.visible) {
             input.text = "";
-            list.currentIndex = 0;
+            root.view.currentIndex = 0;
             input.forceActiveFocus();
         }
     }
 
-    function clampSelection() {
+    // Movement is index arithmetic rather than the views' own
+    // increment/decrement, because those two do not share a vocabulary:
+    // ListView has incrementCurrentIndex, GridView has moveCurrentIndexDown.
+    // Doing the sums here means one set of keys drives both, and a list is
+    // simply the case where `columns` is 1.
+    //
+    // Clamped rather than wrapped, matching Power's grid: an aim that falls off
+    // one edge and reappears at the other is an aim the eye has to go and find.
+    function move(dx, dy) {
         const count = root.model ? root.model.length : 0;
-        list.currentIndex = Math.max(0, Math.min(list.currentIndex, count - 1));
+        if (count === 0)
+            return;
+
+        const cols = root.columns;
+        let col = root.view.currentIndex % cols;
+        let row = Math.floor(root.view.currentIndex / cols);
+
+        col = Math.max(0, Math.min(cols - 1, col + dx));
+        row = Math.max(0, Math.min(Math.ceil(count / cols) - 1, row + dy));
+
+        root.view.currentIndex = Math.min(count - 1, row * cols + col);
     }
 
     Rectangle {
@@ -100,7 +136,24 @@ PanelWindow {
         y: Math.round(parent.height * 0.18)
 
         width: root.panelWidth
-        height: Math.min(root.maxHeight, searchRow.height + list.contentHeight + (footerLabel.visible ? footerLabel.height + 6 : 0) + 30)
+
+        // Everything that is not the view: the search row, the footer, and the
+        // three margins between them. The view gets exactly the rest, which is
+        // what lets the grid below snap to it.
+        readonly property int chrome: searchRow.height + (footerLabel.visible ? footerLabel.height + 6 : 0) + 30
+
+        height: {
+            const full = panel.chrome + root.view.contentHeight;
+            if (!root.grid || full <= root.maxHeight)
+                return Math.min(root.maxHeight, full);
+
+            // A grid tall enough to scroll is cut to a whole number of rows.
+            // Left to the cap it stops partway down a picture, and a row sliced
+            // through the middle reads as a panel that failed to draw rather
+            // than one with more underneath.
+            const rows = Math.max(1, Math.floor((root.maxHeight - panel.chrome) / root.cellHeight));
+            return panel.chrome + rows * root.cellHeight;
+        }
         radius: Theme.panelRadius
 
         color: Theme.panel
@@ -153,17 +206,23 @@ PanelWindow {
 
                 // Any new keystroke re-aims at the top result, which is where
                 // whatever you are typing towards ends up.
-                onTextChanged: list.currentIndex = 0
+                onTextChanged: root.view.currentIndex = 0
 
                 Keys.onPressed: event => {
                     if (event.key === Qt.Key_Escape) {
                         root.dismissed();
                     } else if (event.key === Qt.Key_Down || (event.key === Qt.Key_J && event.modifiers & Qt.ControlModifier)) {
-                        list.incrementCurrentIndex();
+                        root.move(0, 1);
                     } else if (event.key === Qt.Key_Up || (event.key === Qt.Key_K && event.modifiers & Qt.ControlModifier)) {
-                        list.decrementCurrentIndex();
+                        root.move(0, -1);
+                    } else if (root.grid && event.key === Qt.Key_Right) {
+                        // Only claimed in a grid. In a list these are the text
+                        // cursor's, and the query is the only thing to edit.
+                        root.move(1, 0);
+                    } else if (root.grid && event.key === Qt.Key_Left) {
+                        root.move(-1, 0);
                     } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                        root.accepted(list.currentIndex);
+                        root.accepted(root.view.currentIndex);
                     } else if (root.keyHandler && root.keyHandler(event)) {
                         // claimed by the host
                     } else {
@@ -185,8 +244,8 @@ PanelWindow {
             }
         }
 
-        ListView {
-            id: list
+        Item {
+            id: viewArea
 
             anchors {
                 top: searchRow.bottom
@@ -197,16 +256,52 @@ PanelWindow {
                 bottomMargin: 12
             }
 
-            clip: true
-            model: root.model
-            delegate: root.delegate
+            // Both views exist and only one is fed. Handing the idle one an
+            // empty model rather than hiding it matters: a hidden view still
+            // builds a delegate per row, which for the grid is a decoded image
+            // apiece.
 
-            // Keeps the keyboard selection on screen when it walks past the
-            // bottom of the visible rows.
-            highlightMoveDuration: 120
-            preferredHighlightBegin: 40
-            preferredHighlightEnd: height - 40
-            highlightRangeMode: ListView.ApplyRange
+            ListView {
+                id: list
+
+                anchors.fill: parent
+                visible: !root.grid
+
+                clip: true
+                model: root.grid ? [] : root.model
+                delegate: root.delegate
+
+                // Keeps the keyboard selection on screen when it walks past the
+                // bottom of the visible rows.
+                highlightMoveDuration: 120
+                preferredHighlightBegin: 40
+                preferredHighlightEnd: height - 40
+                highlightRangeMode: ListView.ApplyRange
+            }
+
+            GridView {
+                id: gridView
+
+                anchors.fill: parent
+                visible: root.grid
+
+                clip: true
+                model: root.grid ? root.model : []
+                delegate: root.delegate
+
+                // Floored at 1: in list mode this view is idle and both figures
+                // are 0, which GridView complains about.
+                cellWidth: Math.max(1, root.cellWidth)
+                cellHeight: Math.max(1, root.cellHeight)
+
+                // The range is where the top of the selected cell may sit, so
+                // it stops one cell short of the bottom -- otherwise the row
+                // being aimed at is allowed to hang half off the panel.
+                highlightMoveDuration: 120
+                preferredHighlightBegin: 0
+                preferredHighlightEnd: Math.max(0, height - root.cellHeight)
+                highlightRangeMode: GridView.ApplyRange
+            }
         }
 
         BarText {

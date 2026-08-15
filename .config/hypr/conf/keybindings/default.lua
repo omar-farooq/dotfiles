@@ -101,9 +101,9 @@ hl.bind("CTRL + PRINT", hl.dsp.exec_cmd("grimblast --notify copy output"), { des
 
 hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("qs ipc call power toggle"), { description = "Open power menu" })
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("waypaper --random"), { description = "Change the wallpaper" })
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("qs ipc call wallpaper random"), { description = "Change the wallpaper" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("waypaper"), { description = "Open wallpaper selector" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "W", hl.dsp.exec_cmd("qs ipc call wallpaper toggle"), { description = "Open wallpaper selector" })
 
 hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "W", hl.dsp.exec_cmd("~/.config/hypr/scripts/wallpaper-automation.sh"), { description = "Start random wallpaper script" })
 

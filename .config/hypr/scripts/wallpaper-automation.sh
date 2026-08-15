@@ -15,7 +15,13 @@ sec=$(cat ~/.config/ml4w/settings/wallpaper-automation.sh)
 # is tmpfs and cleared at logout, which is exactly the lifetime this wants.
 flag="${XDG_RUNTIME_DIR:-/tmp}/wallpaper-automation"
 _setWallpaperRandomly() {
-    waypaper --random
+    # Was `waypaper --random`. The shell picks now, so this loop and the
+    # SUPER+SHIFT+W keybind can no longer disagree about the folder.
+    #
+    # Silent rather than the keybind's `random`: that one puts up a card naming
+    # the new wallpaper, which here would be a notification every $sec seconds
+    # for as long as the loop runs.
+    qs ipc call wallpaper randomSilent
     echo ":: Next wallpaper in 60 seconds..."
     sleep $sec
     _setWallpaperRandomly

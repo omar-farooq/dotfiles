@@ -48,7 +48,8 @@ Drawer {
     IconButton {
         icon: Icons.wallpaper
 
-        onClicked: Quickshell.execDetached(["waypaper"])
+        // Was waypaper, the last third-party window the desktop still opened.
+        onClicked: Wallpaper.toggle()
 
         // Was wallpaper-effects.sh, which was rofi's last caller anywhere on
         // the machine. Now the same list in the shell's own picker.

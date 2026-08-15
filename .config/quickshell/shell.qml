@@ -90,6 +90,11 @@ ShellRoot {
 
     EffectsWindow {}
 
+    // Also the thing that builds the Wallpaper singleton at startup: its `open`
+    // binding is the first reference to it, and the file listing behind
+    // SUPER+SHIFT+W happens when that singleton is constructed.
+    WallpaperWindow {}
+
     PowerWindow {}
 
     // Not per-screen and not a Variants: WlSessionLock builds its own surface on
@@ -150,6 +155,32 @@ ShellRoot {
 
         function choose(name: string): void {
             WallpaperEffects.apply(name);
+        }
+    }
+
+    // Replaces waypaper. Changing at random is exposed apart from the picker
+    // because two things want it without a window: SUPER+SHIFT+W, and
+    // wallpaper-automation.sh on a sixty-second loop.
+    //
+    // Two entries for the same act, differing only in whether they say so. The
+    // loop's would otherwise be a notification a minute -- see Wallpaper.qml.
+    IpcHandler {
+        target: "wallpaper"
+
+        function toggle(): void {
+            Wallpaper.toggle();
+        }
+
+        function close(): void {
+            Wallpaper.hide();
+        }
+
+        function random(): void {
+            Wallpaper.random(true);
+        }
+
+        function randomSilent(): void {
+            Wallpaper.random(false);
         }
     }
 
