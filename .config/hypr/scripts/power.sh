@@ -1,56 +1,71 @@
 #!/bin/bash
-#  ____                        
-# |  _ \ _____      _____ _ __ 
+#  ____
+# |  _ \ _____      _____ _ __
 # | |_) / _ \ \ /\ / / _ \ '__|
-# |  __/ (_) \ V  V /  __/ |   
-# |_|   \___/ \_/\_/ \___|_|   
-#                              
+# |  __/ (_) \ V  V /  __/ |
+# |_|   \___/ \_/\_/ \___|_|
+#
+# What each session action actually does. Called by the Quickshell power menu
+# (services/Power.qml), which replaced wleave -- and by wlogout before that, so
+# these words have outlived two menus. That is the reason this is still a script
+# rather than six execDetached calls in QML: the menu is the part that keeps
+# getting rewritten.
+#
+# The sleeps are wleave's `delay-command-ms` in another form -- a moment for the
+# menu surface to actually go away before the session is torn down underneath
+# it. Power.qml waits too, so these are belt and braces for anything calling the
+# script directly.
 
-# Check if eww is open
-FILE="$HOME/.cache/ml4w_sidebar"
+case "$1" in
 
-if [[ "$1" == "exit" ]]; then
+exit)
     echo ":: Exit"
-    if [[ -f "$FILE" ]]; then
-        rm $FILE
-    fi
     sleep 0.5
-    killall -9 Hyprland 
+    # `killall -9 Hyprland`, and not `hyprctl dispatch exit`, on purpose. Since
+    # the Hyprland config moved to Lua, hyprctl parses its argument as Lua and
+    # the plain `exit` dispatcher fails *silently* -- the menu appears to do
+    # nothing. The working polite forms, kept here so they are not rediscovered
+    # a third time:
+    #
+    #     hyprctl dispatch 'hl.dsp.exit()'
+    #     loginctl terminate-user "$USER"
+    killall -9 Hyprland
     sleep 2
-fi
+    ;;
 
-if [[ "$1" == "lock" ]]; then
+lock)
     echo ":: Lock"
     sleep 0.5
-    hyprlock    
-fi
+    hyprlock
+    ;;
 
-if [[ "$1" == "reboot" ]]; then
+reboot)
     echo ":: Reboot"
-    if [[ -f "$FILE" ]]; then
-        rm $FILE
-    fi
     sleep 0.5
     systemctl reboot
-fi
+    ;;
 
-if [[ "$1" == "shutdown" ]]; then
+shutdown)
     echo ":: Shutdown"
-    if [[ -f "$FILE" ]]; then
-        rm $FILE
-    fi
     sleep 0.5
     systemctl poweroff
-fi
+    ;;
 
-if [[ "$1" == "suspend" ]]; then
+suspend)
     echo ":: Suspend"
     sleep 0.5
-    systemctl suspend    
-fi
+    systemctl suspend
+    ;;
 
-if [[ "$1" == "hibernate" ]]; then
+hibernate)
     echo ":: Hibernate"
-    sleep 1; 
-    systemctl hibernate    
-fi
+    sleep 1
+    systemctl hibernate
+    ;;
+
+*)
+    echo "Usage: $0 exit|lock|reboot|shutdown|suspend|hibernate" >&2
+    exit 1
+    ;;
+
+esac

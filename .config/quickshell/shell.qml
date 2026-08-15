@@ -25,6 +25,7 @@ import "root:/launcher"
 import "root:/clipboard"
 import "root:/keybinds"
 import "root:/wallpaper"
+import "root:/power"
 import "root:/services"
 
 ShellRoot {
@@ -88,6 +89,8 @@ ShellRoot {
 
     EffectsWindow {}
 
+    PowerWindow {}
+
     IpcHandler {
         target: "launcher"
 
@@ -137,6 +140,18 @@ ShellRoot {
 
         function choose(name: string): void {
             WallpaperEffects.apply(name);
+        }
+    }
+
+    IpcHandler {
+        target: "power"
+
+        function toggle(): void {
+            Power.toggle();
+        }
+
+        function close(): void {
+            Power.hide();
         }
     }
 

@@ -99,7 +99,7 @@ hl.bind(mainMod .. " + " .. "PRINT", hl.dsp.exec_cmd(
 
 hl.bind("CTRL + PRINT", hl.dsp.exec_cmd("grimblast --notify copy output"), { description = "Screenshot this monitor to the clipboard" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("wleave"), { description = "Start wleave (power menu)" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "Q", hl.dsp.exec_cmd("qs ipc call power toggle"), { description = "Open power menu" })
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "W", hl.dsp.exec_cmd("waypaper --random"), { description = "Change the wallpaper" })
 

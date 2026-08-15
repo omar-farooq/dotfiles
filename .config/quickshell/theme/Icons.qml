@@ -12,8 +12,17 @@ pragma Singleton
 import Quickshell
 
 Singleton {
-    // Power menu
+    // Power menu. `power` is the bar button and doubles as the menu's Shutdown
+    // glyph -- it is the same act, so the same symbol. The rest are one each:
+    // padlock, moon for suspend, snowflake for hibernate (a colder sleep),
+    // right-from-bracket for leaving the session, and a rotate arrow for
+    // reboot. All six are in Free Solid; checked with `fc-list :charset=...`.
     readonly property string power: "\uf011"
+    readonly property string lock: "\uf023"
+    readonly property string suspend: "\uf186"
+    readonly property string hibernate: "\uf2dc"
+    readonly property string logout: "\uf2f5"
+    readonly property string reboot: "\uf021"
 
     // Tools drawer
     readonly property string tools: "\uf5fd"
