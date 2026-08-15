@@ -44,7 +44,9 @@ _commandExists "hyprpaper" "hyprpaper"
 # holding the session lock; services/Lock.qml spells out how to use it.
 _commandExists "hyprlock" "hyprlock"
 _commandExists "hypridle" "hypridle"
-_commandExists "hyprshade" "hyprshade"
+# hyprshade is deliberately absent: the screen shader was retired on 2026-08-16
+# because it flickers DP-3 and Hyprland's shader is session-global. The package
+# may still be installed, but nothing here calls it -- see conf/keybindings.
 _commandExists "wal" "python-pywal"
 _commandExists "magick" "imagemagick"
 # Only this script's own banner needs figlet now -- the two ml4w scripts that

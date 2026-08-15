@@ -142,7 +142,22 @@ hl.bind(mainMod .. " + " .. "V", hl.dsp.exec_cmd("qs ipc call clipboard toggle")
 -- has been deleted along with the rest of ml4w. It wrote to config files this
 -- repo now owns outright, so there is nothing left for it to configure.
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "S", hl.dsp.exec_cmd("~/.config/hypr/scripts/hyprshade.sh"), { description = "Toggle screenshader" })
+-- SUPER+SHIFT+S is free: it toggled the screen shader, retired 2026-08-16
+-- along with hyprshade.sh, the tools-drawer button and shaders/invert-colors.glsl.
+--
+-- Hyprland's screen shader is global -- one decoration:screen_shader for the
+-- whole session, no per-output form -- and any shader at all makes the INNOCN on
+-- DP-3 flicker uncontrollably. DP-3 is always attached, so guarding on it would
+-- have disabled the feature permanently anyway. It had gone unused since the
+-- flicker was found on 2026-08-13.
+--
+-- Two things worth knowing if it is ever revived, both learned the hard way.
+-- A custom shader must be GLSL ES 3.00 (`#version 300 es`, `in`/`out`, a `tex`
+-- uniform, `texture()`): Hyprland's own vertex shader outgrew GLSL ES 1.00, and
+-- mixing them fails to link. And a shader that fails to link puts an error
+-- banner across the top of the screen that OUTLIVES switching the shader back
+-- off -- so a bad shader is not something you can simply undo. Reference forms
+-- are in /usr/share/hyprshade/shaders while the package is installed.
 
 hl.bind(mainMod .. " + " .. "ALT" .. " + " .. "G", hl.dsp.exec_cmd("~/.config/hypr/scripts/gamemode.sh"), { description = "Toggle game mode" })
 

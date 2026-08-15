@@ -27,7 +27,6 @@ Singleton {
     // Tools drawer
     readonly property string tools: "\uf5fd"
     readonly property string clipboard: "\uf0ea"
-    readonly property string shader: "\ue4dc"
     readonly property string wallpaper: "\uf03e"
 
     // hypridle. A closed padlock while idle-locking is armed, an open one when

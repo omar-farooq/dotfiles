@@ -1,10 +1,18 @@
-// Clipboard, idle inhibitor, screen shader and wallpaper, behind a hover
-// drawer.
+// Clipboard, idle inhibitor and wallpaper, behind a hover drawer.
 //
 // The wallpaper button has moved here from waybar's separate settings group.
 // That group's other two entries are gone with ml4w: one launched the ML4W
 // settings AppImage, the other switched waybar themes, and neither has anything
 // to act on now.
+//
+// A screen shader button sat between the idle and wallpaper ones until
+// 2026-08-16. Hyprland's screen shader is global -- one decoration:screen_shader
+// for the whole session, with no per-output form -- and any shader makes the
+// INNOCN on DP-3 flicker uncontrollably. DP-3 is a permanently connected desk
+// monitor, so a guard that refused to enable a shader while it was attached
+// would have been a delete with extra steps. Retired instead: unused since the
+// flicker was found on 2026-08-13, and a stray right-click here used to cycle
+// filters and apply each one as it passed.
 
 import Quickshell
 import "root:/theme"
@@ -35,14 +43,6 @@ Drawer {
 
         onClicked: Idle.toggle()
         onRightClicked: Quickshell.execDetached(["hyprlock"])
-    }
-
-    IconButton {
-        icon: Icons.shader
-
-        // Left toggles the current filter, right steps to the next one.
-        onClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/hyprshade.sh`])
-        onRightClicked: Quickshell.execDetached([`${root.scripts}/hypr/scripts/hyprshade.sh`, "next"])
     }
 
     IconButton {
