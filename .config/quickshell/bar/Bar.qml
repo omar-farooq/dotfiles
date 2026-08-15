@@ -91,6 +91,11 @@ PanelWindow {
 
         TrayRow {}
 
+        // Beside the clock, where a bell has lived on every desktop since
+        // there were bells -- and next to the tray, which is the other place
+        // something arrives without being asked for.
+        NotificationsPill {}
+
         PowerButton {}
 
         ClockPill {}

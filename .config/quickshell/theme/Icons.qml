@@ -33,6 +33,12 @@ Singleton {
     // Updates
     readonly property string updates: "\uf0ab"
 
+    // Notifications. A bell for the pill, and the same bell with a line
+    // through it for a history that has nothing in it -- the empty panel
+    // says so in words, but the glyph says it before you read them.
+    readonly property string bell: "\uf0f3"
+    readonly property string bellQuiet: "\uf1f6"
+
     // Network
     readonly property string wifi: "\uf1eb"
     readonly property string ethernet: "\uf796"
