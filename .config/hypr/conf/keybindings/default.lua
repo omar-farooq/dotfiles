@@ -269,6 +269,6 @@ hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOUR
 
 hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"), { description = "Open calculator" })
 
-hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("hyprlock"), { description = "Open screenlock" })
+hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("qs ipc call lock lock"), { description = "Open screenlock" })
 
 -- XF86Tools is free: same deleted ML4W Settings AppImage as SUPER+CTRL+S above.

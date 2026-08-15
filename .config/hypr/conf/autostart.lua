@@ -25,7 +25,7 @@
 -- Load GTK settings
 
 
--- Using hypridle to start hyprlock
+-- Using hypridle to start the lock screen (Quickshell's, since 2026-08-15)
 
 
 -- Load cliphist history

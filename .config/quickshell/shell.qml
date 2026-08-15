@@ -26,6 +26,7 @@ import "root:/clipboard"
 import "root:/keybinds"
 import "root:/wallpaper"
 import "root:/power"
+import "root:/lock"
 import "root:/services"
 
 ShellRoot {
@@ -91,6 +92,15 @@ ShellRoot {
 
     PowerWindow {}
 
+    // Not per-screen and not a Variants: WlSessionLock builds its own surface on
+    // every output, because the protocol requires every output to be covered
+    // before the compositor considers the session locked.
+    //
+    // Inert until Lock.locked goes true. It replaces hyprlock, which is
+    // deliberately still installed -- services/Lock.qml has the way back in if
+    // this ever wedges.
+    LockWindow {}
+
     IpcHandler {
         target: "launcher"
 
@@ -140,6 +150,18 @@ ShellRoot {
 
         function choose(name: string): void {
             WallpaperEffects.apply(name);
+        }
+    }
+
+    // `qs ipc call lock lock`. Only one direction is exposed on purpose: there
+    // is no `unlock` here, because an IPC call that unlocks the screen is a
+    // hole straight through the lock -- anything that can reach the socket
+    // could open the session.
+    IpcHandler {
+        target: "lock"
+
+        function lock(): void {
+            Lock.lock();
         }
     }
 

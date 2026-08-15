@@ -36,7 +36,10 @@ exit)
 lock)
     echo ":: Lock"
     sleep 0.5
-    hyprlock
+    # The Quickshell lock screen, not hyprlock. Unlike the other actions here
+    # this one returns immediately -- the lock lives in the shell process, so
+    # there is nothing to wait on and nothing to keep running.
+    qs ipc call lock lock
     ;;
 
 reboot)

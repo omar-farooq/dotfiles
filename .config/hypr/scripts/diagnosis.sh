@@ -38,6 +38,9 @@ _folderExists() {
 _commandExists "notify-send" "libnotify"
 _commandExists "qs" "quickshell"
 _commandExists "hyprpaper" "hyprpaper"
+# Still checked, but no longer the lock screen -- Quickshell's replaced it.
+# hyprlock is kept installed as the rescue path for a shell that wedges while
+# holding the session lock; services/Lock.qml spells out how to use it.
 _commandExists "hyprlock" "hyprlock"
 _commandExists "hypridle" "hypridle"
 _commandExists "hyprshade" "hyprshade"
