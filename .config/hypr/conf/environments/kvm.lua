@@ -12,7 +12,7 @@
 
 -- ----------------------------------------------------- 
 
--- Default Settings in ml4w.conf
+-- Adds to base.lua rather than replacing it -- see conf/environment.lua.
 
 -- KVM Environment
 

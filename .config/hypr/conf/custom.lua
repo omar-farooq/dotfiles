@@ -22,10 +22,6 @@
 
 -- }
 
--- qt5ct environment variable
-
--- env = QT_QPA_PLATFORMTHEME,qt5ct
-
 -- SDL version
 
 hl.env("SDL_VIDEODRIVER", "wayland")

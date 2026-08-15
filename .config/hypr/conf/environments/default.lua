@@ -12,4 +12,6 @@
 
 -- ----------------------------------------------------- 
 
--- Default Settings in ml4w.conf
+-- The hardware overlay for this machine (AMD/Intel, nothing special needed), so
+-- it is deliberately empty. The shared variables live in base.lua, which
+-- conf/environment.lua requires alongside this file.

@@ -34,7 +34,7 @@ Singleton {
     // watching it keeps the tick in the grid honest even when the wallpaper is
     // changed by something that never went through here -- the automation loop,
     // or the script run by hand.
-    readonly property string currentFile: `${root.home}/.config/ml4w/settings/current-wallpaper`
+    readonly property string currentFile: `${root.home}/.config/hypr/settings/current-wallpaper`
 
     // Under ~/.cache rather than ~/.local/state: every file in here is
     // regenerable from the folder in fourteen seconds, so it is exactly what

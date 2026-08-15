@@ -87,3 +87,133 @@ hl.window_rule({
     },
     monitor = "DP-1",
 })
+
+-- -----------------------------------------------------
+-- Migrated from conf/ml4w.lua
+-- -----------------------------------------------------
+--
+-- These were in a file named after the framework they came from, alongside the
+-- environment variables that are now in environments/base.lua. Nothing about
+-- them was ml4w-specific -- they are just this machine's floating apps -- so
+-- the file was dissolved rather than renamed.
+--
+-- Four rules did NOT come across: two for the ML4W Welcome app
+-- (com.ml4w.welcome, ml4w-welcome.py) and two for ML4W Dotfiles Settings
+-- (com.ml4w.dotfilessettings, ml4w-dotfiles-settings.py). All four AppImages
+-- are deleted, so the rules could never match again.
+
+-- Pavucontrol floating.
+--
+-- Deliberately separate from the "pavucontrol" rule above: that one matches the
+-- old bare class, this one the org.pulseaudio.* class current versions set. The
+-- two are kept apart rather than merged because they want different geometry,
+-- and whichever one is not matching costs nothing.
+hl.window_rule({
+    name  = "pavucontrol-modern",
+    match = {
+        class = "(.*org.pulseaudio.pavucontrol.*)",
+    },
+    float = true,
+    size = { 700, 600 },
+    center = true,
+    pin = true,
+})
+
+-- OpenAI ChatGPT floating. The second rule matches the legacy chat.openai.com
+-- domain, which now redirects to chatgpt.com -- kept because the title match is
+-- on whatever the tab reports, and an old pinned tab can still say the former.
+hl.window_rule({
+    name  = "chatgpt",
+    match = {
+        title = "(ChatGPT.*)",
+    },
+    float = true,
+})
+
+hl.window_rule({
+    name  = "chatgpt-legacy-domain",
+    match = {
+        title = "(.*chat.openai.com.*)",
+    },
+    float = true,
+    size = { 500, "(monitor_h*0.5)" },
+    move = { "(20)", "(70)" },
+})
+
+-- System Mission Center
+
+hl.window_rule({
+    name  = "mission-center",
+    match = {
+        class = "(io.missioncenter.MissionCenter)",
+    },
+    float = true,
+    pin = true,
+    center = true,
+    size = { 900, 600 },
+})
+
+hl.window_rule({
+    name  = "mission-center-preferences",
+    match = {
+        class = "(missioncenter)",
+        title = "^(Preferences)$",
+    },
+    float = true,
+    pin = true,
+    center = true,
+})
+
+-- Gnome Calculator
+
+hl.window_rule({
+    name  = "gnome-calculator",
+    match = {
+        class = "(org.gnome.Calculator)",
+    },
+    float = true,
+    size = { 700, 600 },
+    center = true,
+})
+
+-- Emoji Picker Smile
+
+hl.window_rule({
+    name  = "smile",
+    match = {
+        class = "(it.mijorus.smile)",
+    },
+    float = true,
+    pin = true,
+    move = { "((monitor_w*1)-window_w-40)", "(90)" },
+})
+
+-- Hyprland Share Picker.
+--
+-- `center` was a second rule in ml4w.lua that could never fire: hyprconf2lua
+-- converted `center, class:(hyprland-share-picker)` into a match on a TITLE of
+-- the literal string "class:(hyprland-share-picker)". Folded in here, which is
+-- where it was always meant to be.
+hl.window_rule({
+    name  = "share-picker",
+    match = {
+        class = "(hyprland-share-picker)",
+    },
+    float = true,
+    pin = true,
+    center = true,
+    size = { 600, 400 },
+})
+
+-- General floating: set a window's class to this to have it float centred.
+
+hl.window_rule({
+    name  = "dotfiles-floating",
+    match = {
+        class = "(dotfiles-floating)",
+    },
+    float = true,
+    size = { 1000, 700 },
+    center = true,
+    pin = true,
+})

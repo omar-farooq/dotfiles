@@ -15,24 +15,35 @@ alias lt='eza -a --tree --level=1 --icons'
 alias shutdown='systemctl poweroff'
 alias v='$EDITOR'
 alias vim='$EDITOR'
-alias ts='~/.config/ml4w/scripts/snapshot.sh'
 alias wifi='nmtui'
-alias cleanup='~/.config/ml4w/scripts/cleanup.sh'
 alias android-mount='aft-mtp-mount ~/mnt'
+
+# Removed with the last of ml4w:
+#   ts       -- snapshot.sh, which needed timeshift (not installed) and finished
+#               by running `grub-mkconfig -o /boot/grub/grub.cfg`. There is no
+#               /boot/grub: this machine boots systemd-boot. Its grub-btrfs
+#               branch never applied either, the root filesystem being ext4.
+#   cleanup  -- `sudo pacman -Rns $(pacman -Qtdq)`, which errors out whenever
+#               there are no orphans, i.e. almost always. `pacman -Qtdq` on its
+#               own still lists them if you want to look.
+#   ascii    -- figlet.sh, a figlet wrapper that copied its output with wl-copy
+#               and then again with xclip, the second being an X11 tool on a
+#               Wayland session. `figlet <text> | wl-copy` is the whole idea.
 
 # -----------------------------------------------------
 # Diagnosis
 # -----------------------------------------------------
-alias ml4w-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
-alias ml4w-hyprland-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
-# Removed: ml4w-update (ran update.sh, which re-cloned upstream and reinstalled
-# straight over this repo), ml4w-qtile-diagnosis (target never existed here),
-# ml4w-hyprland (the Hyprland Settings app, deleted along with the hyprctl.sh
-# hook that replayed its settings over the config on every reload),
-# ml4w-sidebar (ags v1 syntax; the installed ags is v3), and finally ml4w /
-# ml4w-settings themselves -- the Welcome and Dotfiles Settings AppImages are
-# gone, so the only ml4w-named things left are these two diagnosis aliases,
-# which point at a script this repo wrote.
+alias hypr-diagnosis='~/.config/hypr/scripts/diagnosis.sh'
+# Renamed from ml4w-diagnosis / ml4w-hyprland-diagnosis. The script is this
+# repo's own and always was; only the name came from upstream, and with ml4w
+# fully retired there is nothing left for that prefix to refer to.
+#
+# Also removed, earlier: ml4w-update (ran update.sh, which re-cloned upstream
+# and reinstalled straight over this repo), ml4w-qtile-diagnosis (target never
+# existed here), ml4w-hyprland (the Hyprland Settings app, deleted along with
+# the hyprctl.sh hook that replayed its settings over the config on every
+# reload), ml4w-sidebar (ags v1 syntax; the installed ags is v3), and ml4w /
+# ml4w-settings themselves -- the Welcome and Dotfiles Settings AppImages.
 
 # -----------------------------------------------------
 # Window Managers
@@ -53,11 +64,6 @@ alias gst="git stash"
 alias gsp="git stash; git pull"
 alias gcheck="git checkout"
 alias gcredential="git config credential.helper store"
-
-# -----------------------------------------------------
-# Scripts
-# -----------------------------------------------------
-alias ascii='~/.config/ml4w/scripts/figlet.sh'
 
 # -----------------------------------------------------
 # System

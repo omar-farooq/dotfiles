@@ -11,7 +11,7 @@
 # ----------------------------------------------------- 
 
 use_cache=0
-if [ -f ~/.config/ml4w/settings/wallpaper_cache ] ;then
+if [ -f ~/.config/hypr/settings/wallpaper_cache ] ;then
     use_cache=1
 fi
 
@@ -26,25 +26,27 @@ fi
 # ----------------------------------------------------- 
 
 force_generate=0
-generated_versions="$HOME/.config/ml4w/cache/wallpaper-generated"
-# Not under cache/: this is the one genuinely stateful thing the wallpaper
-# pipeline keeps -- which image is currently set -- and everything else in
-# cache/ is regenerable output that is now untracked and wiped freely. The
-# shell passes the chosen path in as $1 (services/Wallpaper.qml, which took this
-# over from waypaper), so this file only gets consulted on the argument-less
-# runs: `init`, and a wallpaper-effect change.
-cache_file="$HOME/.config/ml4w/settings/current-wallpaper"
+# Regenerable output, so it lives under ~/.cache rather than in the config tree
+# -- same place and same reasoning as ~/.cache/quickshell/wallpaper-thumbs.
+generated_versions="$HOME/.cache/hypr/wallpaper-generated"
+# Not under the cache: this is the one genuinely stateful thing the wallpaper
+# pipeline keeps -- which image is currently set -- and everything in
+# ~/.cache/hypr is regenerable output that gets wiped freely. The shell passes
+# the chosen path in as $1 (services/Wallpaper.qml, which took this over from
+# waypaper), so this file only gets consulted on the argument-less runs: `init`,
+# and a wallpaper-effect change.
+cache_file="$HOME/.config/hypr/settings/current-wallpaper"
 # Both of these are read by hyprlock.conf -- the blurred one as its background,
 # the square one as the profile picture. hyprlock is not in use (the lock screen
 # is Quickshell's now) but it is deliberately kept installed as the way back in
 # if that ever wedges, so these two are still worth regenerating. There was a
 # third, current_wallpaper.rasi, which only rofi ever imported; it went when rofi
 # did.
-blurred_wallpaper="$HOME/.config/ml4w/cache/blurred_wallpaper.png"
-square_wallpaper="$HOME/.config/ml4w/cache/square_wallpaper.png"
-blur_file="$HOME/.config/ml4w/settings/blur.sh"
+blurred_wallpaper="$HOME/.cache/hypr/blurred_wallpaper.png"
+square_wallpaper="$HOME/.cache/hypr/square_wallpaper.png"
+blur_file="$HOME/.config/hypr/settings/blur.sh"
 default_wallpaper="$HOME/wallpaper/default.jpg"
-wallpaper_effect="$HOME/.config/ml4w/settings/wallpaper-effect.sh"
+wallpaper_effect="$HOME/.config/hypr/settings/wallpaper-effect.sh"
 blur="50x30"
 blur=$(cat $blur_file)
 
@@ -122,7 +124,7 @@ source "$HOME/.cache/wal/colors.sh"
 echo ":: Setting wallpaper with $used_wallpaper"
 killall -e hyprpaper & 
 sleep 1; 
-wal_tpl=$(cat $HOME/.config/ml4w/settings/hyprpaper.tpl)
+wal_tpl=$(cat $HOME/.config/hypr/settings/hyprpaper.tpl)
 output=${wal_tpl//WALLPAPER/$used_wallpaper}
 echo "$output" > $HOME/.config/hypr/hyprpaper.conf
 hyprpaper & > /dev/null 2>&1

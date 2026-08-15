@@ -6,10 +6,10 @@
 # /_/   \_\__,_|\__\___/     \_/\_/  |_|    
 #                                          
 
-sec=$(cat ~/.config/ml4w/settings/wallpaper-automation.sh)
+sec=$(cat ~/.config/hypr/settings/wallpaper-automation.sh)
 
 # The "am I already running" flag lives in the runtime dir, not in
-# ml4w/cache/. It is a lock, not a setting: a reboot should clear it, and
+# ~/.cache/hypr. It is a lock, not a setting: a reboot should clear it, and
 # leaving it under a directory that gets wiped wholesale would have the toggle
 # come back believing it was off while the loop was still going. $XDG_RUNTIME_DIR
 # is tmpfs and cleared at logout, which is exactly the lifetime this wants.

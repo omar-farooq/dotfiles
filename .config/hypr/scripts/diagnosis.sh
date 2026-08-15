@@ -46,9 +46,13 @@ _commandExists "hyprlock" "hyprlock"
 _commandExists "hypridle" "hypridle"
 _commandExists "hyprshade" "hyprshade"
 _commandExists "wal" "python-pywal"
-_commandExists "gum" "gum"
 _commandExists "magick" "imagemagick"
+# Only this script's own banner needs figlet now -- the two ml4w scripts that
+# used it are gone. Kept because a failing banner is the first thing you would
+# see when running this.
 _commandExists "figlet" "figlet"
+# gum was checked here for ml4w's snapshot.sh (timeshift prompts), which was
+# deleted along with the rest of ml4w. Nothing on the machine calls it now.
 
 echo
 echo "Press return to exit"

@@ -4,4 +4,9 @@
 
 ---@module 'hl'
 
+-- Two files, in this order: the shared variables that apply on any hardware,
+-- then the overlay for this machine's. Swap the second line for
+-- conf.environments.nvidia or conf.environments.kvm -- they only add what is
+-- specific to that hardware and rely on base for everything else.
+require("conf.environments.base")
 require("conf.environments.default")

@@ -18,19 +18,24 @@ local mainMod = "SUPER"
 
 local HYPRSCRIPTS = "~/.config/hypr/scripts"
 
-local SCRIPTS = "~/.config/ml4w/scripts"
-
 -- Applications
+--
+-- These five used to go through one-word shim scripts under ml4w/settings/
+-- (terminal.sh containing "alacritty", and so on). Those existed only because
+-- the ML4W Dotfiles Settings GUI wrote them -- it was how you picked your
+-- terminal without editing Hyprland config. That app is deleted, so the
+-- indirection had nothing left on the other end of it and the commands are
+-- named here directly.
 
-hl.bind(mainMod .. " + " .. "RETURN", hl.dsp.exec_cmd("~/.config/ml4w/settings/terminal.sh"), { description = "Open the terminal" })
+hl.bind(mainMod .. " + " .. "RETURN", hl.dsp.exec_cmd("alacritty"), { description = "Open the terminal" })
 
-hl.bind(mainMod .. " + " .. "B", hl.dsp.exec_cmd("~/.config/ml4w/settings/browser.sh"), { description = "Open the browser" })
+hl.bind(mainMod .. " + " .. "B", hl.dsp.exec_cmd("firefox"), { description = "Open the browser" })
 
-hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/filemanager.sh"), { description = "Open the filemanager" })
+hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("nautilus"), { description = "Open the filemanager" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "E", hl.dsp.exec_cmd("~/.config/ml4w/settings/emojipicker.sh"), { description = "Open the emoji picker" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "E", hl.dsp.exec_cmd("smile"), { description = "Open the emoji picker" })
 
-hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "C", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"), { description = "Open the calculator" })
+hl.bind(mainMod .. " + " .. "CTRL" .. " + " .. "C", hl.dsp.exec_cmd("gnome-calculator"), { description = "Open the calculator" })
 
 -- Windows
 
@@ -267,7 +272,7 @@ hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("qs ipc call media previous"), { descri
 
 hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), { description = "Toggle microphone" })
 
-hl.bind("XF86Calculator", hl.dsp.exec_cmd("~/.config/ml4w/settings/calculator.sh"), { description = "Open calculator" })
+hl.bind("XF86Calculator", hl.dsp.exec_cmd("gnome-calculator"), { description = "Open calculator" })
 
 hl.bind("XF86ScreenSaver", hl.dsp.exec_cmd("qs ipc call lock lock"), { description = "Open screenlock" })
 

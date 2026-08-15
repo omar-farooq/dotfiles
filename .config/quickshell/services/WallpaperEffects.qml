@@ -26,10 +26,10 @@ Singleton {
     readonly property string effectsDir: `${root.home}/.config/hypr/effects/wallpaper`
     readonly property string wallpaperScript: `${root.home}/.config/hypr/scripts/wallpaper.sh`
 
-    // Still under ml4w/, but this is Omar's own tracked settings file rather
-    // than upstream code -- wallpaper.sh reads the name from here, so moving it
-    // would mean editing that script too, for no gain.
-    readonly property string settingFile: `${root.home}/.config/ml4w/settings/wallpaper-effect.sh`
+    // wallpaper.sh reads the effect name from here. Moved out of the old
+    // ml4w/settings/ when that directory was retired -- it is a tracked setting
+    // this repo owns, so it belongs next to the config that consumes it.
+    readonly property string settingFile: `${root.home}/.config/hypr/settings/wallpaper-effect.sh`
 
     // The name written in the settings file. "off" is a real value, not an
     // absence: wallpaper.sh compares against it explicitly.

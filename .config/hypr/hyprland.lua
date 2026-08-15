@@ -74,10 +74,9 @@ require("conf.animation")
 -- -----------------------------------------------------
 require("conf.custom")
 
--- -----------------------------------------------------
--- ML4W Configuration
--- -----------------------------------------------------
-require("conf.ml4w")
+-- conf/ml4w.lua was dissolved rather than renamed: its environment variables
+-- are in conf/environments/base.lua and its window rules in
+-- conf/windowrules/default.lua, both of which are already required above.
 
 -- -----------------------------------------------------
 -- Environment for xdg-desktop-portal-hyprland

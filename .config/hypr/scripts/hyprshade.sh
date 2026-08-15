@@ -25,8 +25,8 @@ if [[ "$1" == "next" ]]; then
     filters+=("off")
 
     current_filter="blue-light-filter"
-    if [ -f ~/.config/ml4w/settings/hyprshade.sh ]; then
-        source ~/.config/ml4w/settings/hyprshade.sh
+    if [ -f ~/.config/hypr/settings/hyprshade.sh ]; then
+        source ~/.config/hypr/settings/hyprshade.sh
         current_filter="$hyprshade_filter"
     fi
 
@@ -41,7 +41,7 @@ if [[ "$1" == "next" ]]; then
     done
 
     choice="${filters[$next_index]}"
-    echo "hyprshade_filter=\"$choice\"" > ~/.config/ml4w/settings/hyprshade.sh
+    echo "hyprshade_filter=\"$choice\"" > ~/.config/hypr/settings/hyprshade.sh
 
     # Apply straight away rather than waiting for the next toggle, so cycling
     # shows you each filter as you pass through it.
@@ -59,8 +59,8 @@ else
     hyprshade_filter="blue-light-filter"
 
     # Check if hyprshade.sh settings file exists and load
-    if [ -f ~/.config/ml4w/settings/hyprshade.sh ] ;then
-        source ~/.config/ml4w/settings/hyprshade.sh
+    if [ -f ~/.config/hypr/settings/hyprshade.sh ] ;then
+        source ~/.config/hypr/settings/hyprshade.sh
     fi
 
     # Toggle Hyprshade
