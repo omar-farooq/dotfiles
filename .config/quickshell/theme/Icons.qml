@@ -62,8 +62,10 @@ Singleton {
     readonly property string spotify: "\uf1bc"
     readonly property string play: "\uf04b"
     readonly property string pause: "\uf04c"
-    // Launcher
+    // Launcher. The star marks a pinned application in the browse list.
     readonly property string search: "\uf002"
+    readonly property string star: "\uf005"
+
     // Clipboard
     readonly property string image: "\uf1c5"
 

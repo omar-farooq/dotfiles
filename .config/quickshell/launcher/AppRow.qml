@@ -11,9 +11,11 @@ Rectangle {
 
     required property var entry
     property bool selected: false
+    property bool favourite: false
 
     signal activated
     signal hovered
+    signal togglePin
 
     implicitHeight: 46
     radius: 10
@@ -33,15 +35,40 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        onClicked: root.activated()
         onEntered: root.hovered()
+
+        onClicked: event => {
+            if (event.button === Qt.RightButton)
+                root.togglePin();
+            else
+                root.activated();
+        }
+    }
+
+    // Pinned marker, at the trailing edge rather than in front of the icon: a
+    // star column would be blank on nearly every row and indent all fifty
+    // applications to make room for the four that are pinned.
+    BarIcon {
+        id: pin
+
+        anchors {
+            right: parent.right
+            rightMargin: 12
+            verticalCenter: parent.verticalCenter
+        }
+
+        text: Icons.star
+        visible: root.favourite
+        opacity: 0.75
+        font.pixelSize: Theme.iconSize - 3
     }
 
     Row {
         anchors {
             left: parent.left
-            right: parent.right
+            right: root.favourite ? pin.left : parent.right
             verticalCenter: parent.verticalCenter
             leftMargin: 10
             rightMargin: 10
